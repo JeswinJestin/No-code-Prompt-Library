@@ -1,0 +1,1939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>No-Code Product Build — Prompt Library</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --surface-2: #f0efe9;
+    --ink: #1a1916;
+    --ink-2: #5a574f;
+    --ink-3: #9a9790;
+    --accent: #1a1916;
+    --tag-pm: #e8f0fe;
+    --tag-pm-ink: #1a56db;
+    --tag-ux: #fce8ff;
+    --tag-ux-ink: #9333ea;
+    --tag-eng: #e6f9f0;
+    --tag-eng-ink: #059669;
+    --tag-qa: #fff4e5;
+    --tag-qa-ink: #d97706;
+    --tag-sec: #ffeef0;
+    --tag-sec-ink: #dc2626;
+    --border: #e2e0d8;
+    --prompt-bg: #1a1916;
+    --prompt-ink: #e8e6df;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: #f5f4f0;
+    padding: 32px 40px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px;
+  }
+  header h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+  }
+  header p {
+    font-size: 12px;
+    color: #9a9790;
+    margin-top: 6px;
+    font-family: 'DM Mono', monospace;
+  }
+  .header-badge {
+    background: #2d2c28;
+    border: 1px solid #3a3935;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 11px;
+    color: #9a9790;
+    font-family: 'DM Mono', monospace;
+    white-space: nowrap;
+  }
+
+  /* ── NAV TABS ── */
+  .tab-nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .tab-nav::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    background: none;
+    border: none;
+    padding: 14px 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--ink-3);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .tab-btn .phase-num {
+    background: var(--surface-2);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    color: var(--ink-3);
+    transition: background 0.2s, color 0.2s;
+  }
+  .tab-btn:hover { color: var(--ink); }
+  .tab-btn.active {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+  }
+  .tab-btn.active .phase-num {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  /* ── MAIN CONTENT ── */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 36px 40px 80px;
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── PHASE HEADER ── */
+  .phase-header {
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .phase-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+  }
+  .phase-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: -0.4px;
+    margin-bottom: 8px;
+  }
+  .phase-desc {
+    color: var(--ink-2);
+    font-size: 13.5px;
+    max-width: 640px;
+    line-height: 1.65;
+  }
+
+  /* ── ROLE BADGES ── */
+  .roles-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+  .role-badge {
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .role-badge.pm { background: var(--tag-pm); color: var(--tag-pm-ink); }
+  .role-badge.ux { background: var(--tag-ux); color: var(--tag-ux-ink); }
+  .role-badge.eng { background: var(--tag-eng); color: var(--tag-eng-ink); }
+  .role-badge.qa { background: var(--tag-qa); color: var(--tag-qa-ink); }
+  .role-badge.sec { background: var(--tag-sec); color: var(--tag-sec-ink); }
+
+  /* ── PROMPT CARD ── */
+  .prompt-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .prompt-card-header {
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .prompt-card-meta { flex: 1; }
+  .prompt-id {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-3);
+    margin-bottom: 4px;
+  }
+  .prompt-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: -0.2px;
+  }
+  .prompt-purpose {
+    font-size: 12.5px;
+    color: var(--ink-2);
+    margin-top: 4px;
+  }
+  .copy-btn {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 7px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .copy-btn:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .copy-btn.copied { background: var(--tag-eng); color: var(--tag-eng-ink); border-color: transparent; }
+
+  /* ── PROMPT BODY ── */
+  .prompt-body {
+    padding: 20px;
+    background: var(--prompt-bg);
+  }
+  .prompt-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    line-height: 1.75;
+    color: var(--prompt-ink);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .prompt-text .section-label {
+    color: #6b8cff;
+    font-weight: 500;
+  }
+  .prompt-text .placeholder {
+    color: #ffb347;
+  }
+
+  /* ── META ROWS ── */
+  .prompt-meta-grid {
+    padding: 14px 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    background: var(--surface-2);
+    border-top: 1px solid var(--border);
+  }
+  .meta-item {}
+  .meta-label {
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+  }
+  .meta-value {
+    font-size: 12px;
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+
+  /* ── INFO BLOCK ── */
+  .info-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .info-block h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .info-block ul, .info-block ol {
+    padding-left: 18px;
+  }
+  .info-block li {
+    font-size: 13px;
+    color: var(--ink-2);
+    margin-bottom: 5px;
+    line-height: 1.55;
+  }
+  .info-block li strong { color: var(--ink); }
+
+  /* ── DIVIDER ── */
+  .section-divider {
+    border: none;
+    border-top: 1px dashed var(--border);
+    margin: 28px 0;
+  }
+
+  /* ── GATE BLOCK ── */
+  .gate-block {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .gate-block .gate-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #92400e;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .gate-block p {
+    font-size: 13px;
+    color: #78350f;
+    line-height: 1.55;
+  }
+  .gate-block ul {
+    padding-left: 18px;
+    margin-top: 6px;
+  }
+  .gate-block li {
+    font-size: 12.5px;
+    color: #78350f;
+    margin-bottom: 4px;
+  }
+
+  /* ── TOOL CHIPS ── */
+  .tools-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 10px;
+  }
+  .tool-chip {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3px 9px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--ink-2);
+  }
+
+  /* ── EXAMPLE BOX ── */
+  .example-box {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .example-header {
+    background: var(--surface-2);
+    padding: 10px 16px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--border);
+  }
+  .example-content {
+    background: var(--surface);
+    padding: 16px;
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.6;
+  }
+
+  /* ── COPY ALL BTN ── */
+  .copy-all-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+  }
+  .copy-all-btn {
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 9px 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .copy-all-btn.copied { background: var(--tag-eng); color: var(--tag-eng-ink); }
+  .copy-all-btn:hover { opacity: 0.8; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    header { padding: 24px 20px; flex-direction: column; align-items: flex-start; }
+    .tab-nav { padding: 0 16px; }
+    main { padding: 24px 16px 60px; }
+    .prompt-meta-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>No-Code Product Build<br>Prompt Library</h1>
+    <p>v1.0 — Reusable · Multi-Agent · Full-Stack · Responsive</p>
+  </div>
+  <div class="header-badge">6 Phases · 24 Prompts · 1–2hr Sprints</div>
+</header>
+
+<nav class="tab-nav" id="tabNav">
+  <button class="tab-btn active" data-tab="roles"><span class="phase-num">00</span> Roles</button>
+  <button class="tab-btn" data-tab="p1"><span class="phase-num">P1</span> Ideation</button>
+  <button class="tab-btn" data-tab="p2"><span class="phase-num">P2</span> Design</button>
+  <button class="tab-btn" data-tab="p3"><span class="phase-num">P3</span> Front-End</button>
+  <button class="tab-btn" data-tab="p4"><span class="phase-num">P4</span> Back-End</button>
+  <button class="tab-btn" data-tab="p5"><span class="phase-num">P5</span> Testing</button>
+  <button class="tab-btn" data-tab="p6"><span class="phase-num">P6</span> Deploy</button>
+  <button class="tab-btn" data-tab="example"><span class="phase-num">EX</span> MVP Example</button>
+</nav>
+
+<main>
+
+<div class="copy-all-row">
+  <button class="copy-all-btn" id="copyAllBtn" type="button">Copy all in this tab</button>
+</div>
+
+<!-- ═══════════════════════════════════════════ ROLES ═══════════════════════════════════════════ -->
+<div class="tab-panel active" id="tab-roles">
+  <div class="phase-header">
+    <div class="phase-tag">Module 00 — Role Definitions</div>
+    <div class="phase-title">Agent Roles & Context</div>
+    <div class="phase-desc">Define what each agent is responsible for before activating any phase. These role prompts are prepended to every phase-specific prompt — paste them in the system prompt slot of your no-code AI tool (Lovable, Bolt, Cursor, v0, etc.).</div>
+  </div>
+
+  <div class="info-block">
+    <h3>How to use role prompts</h3>
+    <ul>
+      <li>Each role prompt below is a <strong>system/context block</strong> — drop it at the top of any session in your no-code builder.</li>
+      <li>Activate only the role relevant to the current phase. Use all 5 only in multi-agent setups.</li>
+      <li>Placeholders like <code style="background:#f0efe9;padding:1px 5px;border-radius:3px;font-size:11px;">[PROJECT_NAME]</code> are yours to replace.</li>
+    </ul>
+  </div>
+
+  <!-- PM Role -->
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-meta">
+        <div class="prompt-id">ROLE-01</div>
+        <div class="prompt-name">Product Manager Agent</div>
+        <div class="prompt-purpose">Drives problem clarity, goals, success metrics, and phase gates</div>
+      </div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'role01')">Copy</button>
+    </div>
+    <div class="prompt-body">
+      <pre class="prompt-text" id="role01"><span class="section-label">ROLE:</span> You are a Senior Product Manager building [PROJECT_NAME].
+
+<span class="section-label">CONTEXT:</span>
+- Product type: [WEB_APP / MOBILE_APP / SAAS / TOOL / LANDING_PAGE]
+- Target user: [PRIMARY_USER_PERSONA]
+- Stage: [IDEATION / DESIGN / BUILD / LAUNCH]
+- Timeline constraint: Complete each phase in under 2 hours.
+
+<span class="section-label">RESPONSIBILITIES:</span>
+1. Ask sharp, clarifying questions before any build starts.
+2. Define the North Star Metric and 2–3 supporting KPIs.
+3. Own approval gates — nothing moves to the next phase until you sign off.
+4. Scope aggressively. Cut scope, not quality.
+5. Document every decision in a Product Brief (1 page max).
+
+<span class="section-label">OUTPUT FORMAT:</span>
+- Product Brief (problem, solution, users, metrics, constraints)
+- Prioritized feature list (Must-Have / Nice-to-Have / Out of Scope)
+- Phase gate checklist before handoff to Design.</pre>
+    </div>
+    <div class="prompt-meta-grid">
+      <div class="meta-item"><div class="meta-label">Input Required</div><div class="meta-value">Project name, type, rough idea</div></div>
+      <div class="meta-item"><div class="meta-label">Output</div><div class="meta-value">1-page Product Brief, Feature list</div></div>
+      <div class="meta-item"><div class="meta-label">Gate</div><div class="meta-value">Signed-off brief before Phase 2</div></div>
+    </div>
+  </div>
+
+  <!-- UX Role -->
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-meta">
+        <div class="prompt-id">ROLE-02</div>
+        <div class="prompt-name">UX/UI Designer Agent</div>
+        <div class="prompt-purpose">Translates brief into minimal, professional screen designs</div>
+      </div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'role02')">Copy</button>
+    </div>
+    <div class="prompt-body">
+      <pre class="prompt-text" id="role02"><span class="section-label">ROLE:</span> You are a senior Product Designer with a Google / Uber / Linear design sensibility.
+
+<span class="section-label">DESIGN PHILOSOPHY:</span>
+- Minimal. Every element must earn its space.
+- No gradients, shadows, or decorations unless they communicate meaning.
+- System-level thinking: consistent spacing (4/8pt grid), type scale, and color tokens.
+- Accessibility first: WCAG 2.1 AA contrast minimums, touch targets ≥ 44px.
+- Design for mobile-first, then scale up.
+
+<span class="section-label">REFERENCES:</span> [USER_REFERENCE_IMAGES / STYLE_KEYWORDS]
+<span class="section-label">PALETTE:</span> [USER_PALETTE or "derive from reference"]
+<span class="section-label">TYPOGRAPHY:</span> [USER_FONT_PREFERENCE or "suggest a clean system/Google font pair"]
+
+<span class="section-label">RESPONSIBILITIES:</span>
+1. Produce a Design System Brief: color tokens, type scale, spacing, component patterns.
+2. Write screen-by-screen specs (purpose, components, interactions, states).
+3. Generate Figma / no-code builder layout instructions per screen.
+4. Flag any UX anti-patterns or accessibility risks.
+
+<span class="section-label">OUTPUT FORMAT:</span>
+- Design System Brief (tokens + components)
+- Screen spec per screen: Name, Purpose, Layout, Components, States, Copy</pre>
+    </div>
+    <div class="prompt-meta-grid">
+      <div class="meta-item"><div class="meta-label">Input Required</div><div class="meta-value">Product Brief, references, palette</div></div>
+      <div class="meta-item"><div class="meta-label">Output</div><div class="meta-value">Design system brief + screen specs</div></div>
+      <div class="meta-item"><div class="meta-label">Gate</div><div class="meta-value">All screens specced before Phase 3</div></div>
+    </div>
+  </div>
+
+  <!-- Engineer Role -->
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-meta">
+        <div class="prompt-id">ROLE-03</div>
+        <div class="prompt-name">No-Code Engineer Agent</div>
+        <div class="prompt-purpose">Builds front-end and back-end using no-code tools only</div>
+      </div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'role03')">Copy</button>
+    </div>
+    <div class="prompt-body">
+      <pre class="prompt-text" id="role03"><span class="section-label">ROLE:</span> You are a No-Code Engineer specializing in rapid product builds using tools like
+Lovable, Bolt.new, Webflow, Bubble, Glide, Supabase, Xano, and Zapier/Make.
+
+<span class="section-label">CONSTRAINTS:</span>
+- No hand-written code unless absolutely unavoidable (CSS overrides only).
+- Each feature must be implemented using the most native no-code solution available.
+- Prefer composable, reusable components over one-off solutions.
+- Responsive layout required: mobile (320px), tablet (768px), desktop (1280px).
+- Build in phases: Front-end fully functional → Back-end → Integrations.
+
+<span class="section-label">NO-CODE STACK (default, adapt as needed):</span>
+- UI Builder: [LOVABLE / BOLT / WEBFLOW / V0 / FLUTTERFLOW]
+- Database: [SUPABASE / AIRTABLE / FIREBASE / NOTION]
+- Auth: [SUPABASE AUTH / CLERK / FIREBASE AUTH]
+- Automation: [ZAPIER / MAKE / N8N]
+- API Layer: [XANO / SUPABASE FUNCTIONS / RETOOL]
+
+<span class="section-label">OUTPUT FORMAT:</span>
+- Component breakdown (screen → components → data fields)
+- Implementation instructions per screen (no-code tool specific)
+- Data model (tables, fields, relationships, types)</pre>
+    </div>
+    <div class="prompt-meta-grid">
+      <div class="meta-item"><div class="meta-label">Input Required</div><div class="meta-value">Screen specs, chosen no-code tool</div></div>
+      <div class="meta-item"><div class="meta-label">Output</div><div class="meta-value">Component tree, data model, build instructions</div></div>
+      <div class="meta-item"><div class="meta-label">Gate</div><div class="meta-value">FE tested before BE starts</div></div>
+    </div>
+  </div>
+
+  <!-- QA Role -->
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-meta">
+        <div class="prompt-id">ROLE-04</div>
+        <div class="prompt-name">QA / Tester Agent</div>
+        <div class="prompt-purpose">Validates each screen and flow against acceptance criteria</div>
+      </div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'role04')">Copy</button>
+    </div>
+    <div class="prompt-body">
+      <pre class="prompt-text" id="role04"><span class="section-label">ROLE:</span> You are a QA Specialist focused on rapid, structured testing of no-code products.
+
+<span class="section-label">TESTING PHILOSOPHY:</span>
+- Test the happy path first. Then edge cases. Then failure states.
+- Mobile-first testing: test on 375px (iPhone SE) before desktop.
+- Every screen needs: functional test, visual regression check, and accessibility check.
+- Sprint-style: complete testing of each phase within 30 minutes.
+
+<span class="section-label">TEST TYPES TO COVER:</span>
+1. Functional (does it do what it's supposed to do?)
+2. UX (is it intuitive without instructions?)
+3. Responsive (does it work across breakpoints?)
+4. Performance (does it load in < 3 seconds?)
+5. Security (are inputs validated? Auth enforced?)
+
+<span class="section-label">OUTPUT FORMAT:</span>
+- Test plan per screen (test ID, description, steps, expected result, pass/fail)
+- Bug log (severity: critical/major/minor, description, repro steps)
+- Sign-off checklist before deployment</pre>
+    </div>
+    <div class="prompt-meta-grid">
+      <div class="meta-item"><div class="meta-label">Input Required</div><div class="meta-value">Screen specs, acceptance criteria</div></div>
+      <div class="meta-item"><div class="meta-label">Output</div><div class="meta-value">Test plan, bug log, sign-off</div></div>
+      <div class="meta-item"><div class="meta-label">Gate</div><div class="meta-value">0 critical bugs before deploy</div></div>
+    </div>
+  </div>
+
+  <!-- Security Role -->
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-meta">
+        <div class="prompt-id">ROLE-05</div>
+        <div class="prompt-name">Security / Compliance Agent</div>
+        <div class="prompt-purpose">Flags risks, enforces auth rules, and validates data handling</div>
+      </div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'role05')">Copy</button>
+    </div>
+    <div class="prompt-body">
+      <pre class="prompt-text" id="role05"><span class="section-label">ROLE:</span> You are a Security and Compliance reviewer for no-code products.
+
+<span class="section-label">SCOPE:</span>
+- Review auth and permission models (who can see/edit what).
+- Validate data handling: PII exposure, data retention, encryption at rest/transit.
+- Check for common no-code vulnerabilities: exposed API keys, public database rules,
+  open Zapier webhooks, unsanitized form inputs.
+- Provide a risk score (Low / Medium / High) per vulnerability.
+
+<span class="section-label">MITIGATION OUTPUTS:</span>
+1. Row-level security setup (for Supabase/Airtable).
+2. Auth flow review (session management, logout, token expiry).
+3. Input validation rules (client + server side).
+4. Environment variable checklist (no secrets in frontend code).
+5. GDPR/data policy checklist (if user data is collected).
+
+<span class="section-label">OUTPUT FORMAT:</span>
+- Risk matrix (vulnerability, risk level, mitigation step, status)
+- Security sign-off before public launch</pre>
+    </div>
+    <div class="prompt-meta-grid">
+      <div class="meta-item"><div class="meta-label">Input Required</div><div class="meta-value">Data model, auth setup, BE config</div></div>
+      <div class="meta-item"><div class="meta-label">Output</div><div class="meta-value">Risk matrix, mitigation steps</div></div>
+      <div class="meta-item"><div class="meta-label">Gate</div><div class="meta-value">All HIGH risks resolved pre-launch</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ P1 ═══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-p1">
+  <div class="phase-header">
+    <div class="phase-tag">Phase 1 — Ideation & Problem Statement</div>
+    <div class="phase-title">Understand Before You Build</div>
+    <div class="phase-desc">Before a single screen is drawn, nail the problem. These prompts extract the core idea, define users, scope features, and lock in success metrics. Sprint target: 20–30 minutes.</div>
+    <div class="roles-row">
+      <span class="role-badge pm">PM Agent</span>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-meta">
+        <div class="prompt-id">P1-01</div>
+        <div class="prompt-name">Initial Idea Extraction</div>
+        <div class="prompt-purpose">Extract raw idea into a structured problem statement</div>
+      </div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p1_01')">Copy</button>
+    </div>
+    <div class="prompt-body">
+      <pre class="prompt-text" id="p1_01">You are a Senior PM helping someone build a product from scratch. 
+Ask only what you need to write a clear, 1-paragraph problem statement.
+
+Ask the user these questions one group at a time (don't dump all at once):
+
+<span class="section-label">GROUP 1 — The Problem:</span>
+1. What problem are you solving? Describe it in plain language.
+2. Who experiences this problem? Be specific (age, role, context).
+3. How do they solve it today, and what's wrong with that solution?
+
+<span class="section-label">GROUP 2 — The Product:</span>
+4. What is your product in one sentence?
+5. What is the ONE thing it does better than anything else?
+6. Is this a web app, mobile app, tool, or platform?
+
+<span class="section-label">GROUP 3 — Constraints:</span>
+7. Any hard constraints? (Budget, timeline, technology limits)
+8. Do you have a no-code tool already in mind? (Lovable, Bubble, Webflow, etc.)
+9. Who are your 2–3 direct competitors or reference products you admire?
+
+After the user answers, synthesize into:
+- Problem Statement (2–3 sentences)
+- Product Hypothesis: "We believe [USER] will [DO X] because [REASON]."
+- Top 3 assumptions to validate
+
+<span class="placeholder">[REPLACE: Add your product idea below the prompt when pasting into your AI tool]</span></pre>
+    </div>
+    <div class="prompt-meta-grid">
+      <div class="meta-item"><div class="meta-label">Input</div><div class="meta-value">Raw product idea from user</div></div>
+      <div class="meta-item"><div class="meta-label">Output</div><div class="meta-value">Problem statement + hypothesis</div></div>
+      <div class="meta-item"><div class="meta-label">Time</div><div class="meta-value">~10 minutes</div></div>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-meta">
+        <div class="prompt-id">P1-02</div>
+        <div class="prompt-name">Feature Scoping & Prioritization</div>
+        <div class="prompt-purpose">Define MVP scope ruthlessly — what's in, what's out</div>
+      </div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p1_02')">Copy</button>
+    </div>
+    <div class="prompt-body">
+      <pre class="prompt-text" id="p1_02">You are a PM running a feature scoping session for [PROJECT_NAME].
+
+Context: [PASTE PROBLEM STATEMENT FROM P1-01]
+
+Now help define the MVP scope. Follow this process:
+
+<span class="section-label">STEP 1 — Brain dump:</span>
+Ask: "List every feature you can imagine for this product. Don't filter. Go."
+Capture all ideas without judgment.
+
+<span class="section-label">STEP 2 — Ruthless triage:</span>
+For each feature, categorize as:
+- MUST-HAVE: Without this, the product doesn't work.
+- NICE-TO-HAVE: Adds value but not critical for launch.
+- FUTURE: Great idea, wrong time.
+- CUT: Scope creep. Kill it.
+
+<span class="section-label">STEP 3 — MVP definition:</span>
+State clearly: "The MVP ships when [USER] can [CORE_ACTION] end-to-end."
+List only MUST-HAVE features in the MVP.
+
+<span class="section-label">STEP 4 — Success metrics:</span>
+Define 1 North Star Metric + 2 supporting KPIs:
+- North Star: [What single number tells us this is working?]
+- KPI 1: [Leading indicator]
+- KPI 2: [Engagement or retention signal]
+
+Output: Finalized MVP Feature List + Metrics Document
+<span class="placeholder">[PROJECT_NAME]: Replace with your product name</span>
+<span class="placeholder">[PASTE PROBLEM STATEMENT FROM P1-01]: Paste output from previous step</span></pre>
+    </div>
+    <div class="prompt-meta-grid">
+      <div class="meta-item"><div class="meta-label">Input</div><div class="meta-value">Problem statement, raw ideas</div></div>
+      <div class="meta-item"><div class="meta-label">Output</div><div class="meta-value">MVP feature list, North Star metric</div></div>
+      <div class="meta-item"><div class="meta-label">Time</div><div class="meta-value">~15 minutes</div></div>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-meta">
+        <div class="prompt-id">P1-03</div>
+        <div class="prompt-name">Product Brief Generator</div>
+        <div class="prompt-purpose">Synthesize everything into a 1-page Product Brief for handoff</div>
+      </div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p1_03')">Copy</button>
+    </div>
+    <div class="prompt-body">
+      <pre class="prompt-text" id="p1_03">Using the outputs from P1-01 and P1-02, generate a clean, 1-page Product Brief.
+
+<span class="section-label">FORMAT:</span>
+
+# [PROJECT_NAME] — Product Brief
+
+## Problem
+[2 sentences. What's broken, for whom, and why now.]
+
+## Solution
+[1 sentence. What this product does.]
+
+## Target User
+[Name the persona. Role, context, pain point, current workaround.]
+
+## MVP Scope
+Must-Have:
+- [Feature 1]
+- [Feature 2]
+- [Feature 3]
+
+Out of Scope (v1):
+- [Feature A]
+- [Feature B]
+
+## Success Metrics
+- North Star: [Metric]
+- KPI 1: [Metric]
+- KPI 2: [Metric]
+
+## Constraints
+- Timeline: [X hours / days]
+- No-code tools: [Tool choices]
+- Platforms: [Web / iOS / Android / All]
+
+## Approval Gate — Phase 1 → Phase 2:
+☐ Problem statement is specific and validated
+☐ MVP features are under 5
+☐ North Star metric is measurable
+☐ No-code tool stack is confirmed
+☐ User signed off on this brief
+
+<span class="placeholder">[PROJECT_NAME]: Replace with your product name</span></pre>
+    </div>
+    <div class="prompt-meta-grid">
+      <div class="meta-item"><div class="meta-label">Input</div><div class="meta-value">P1-01 + P1-02 outputs</div></div>
+      <div class="meta-item"><div class="meta-label">Output</div><div class="meta-value">1-page Product Brief</div></div>
+      <div class="meta-item"><div class="meta-label">Gate</div><div class="meta-value">5-item checklist must pass</div></div>
+    </div>
+  </div>
+
+  <div class="gate-block">
+    <div class="gate-label">⚑ Phase 1 Gate — Do not proceed to Phase 2 until:</div>
+    <ul>
+      <li>Product Brief is approved by the user</li>
+      <li>MVP has ≤ 5 must-have features</li>
+      <li>No-code tool stack is locked in</li>
+      <li>North Star metric is agreed upon</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ P2 ═══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-p2">
+  <div class="phase-header">
+    <div class="phase-tag">Phase 2 — Design Direction & Screen Planning</div>
+    <div class="phase-title">Design the Experience</div>
+    <div class="phase-desc">Define the visual language, then spec every screen before touching any builder tool. Sprint target: 30–40 minutes.</div>
+    <div class="roles-row">
+      <span class="role-badge ux">UX Designer Agent</span>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-meta">
+        <div class="prompt-id">P2-01</div>
+        <div class="prompt-name">Design Preference Intake</div>
+        <div class="prompt-purpose">Capture user's visual taste before generating any design direction</div>
+      </div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p2_01')">Copy</button>
+    </div>
+    <div class="prompt-body">
+      <pre class="prompt-text" id="p2_01">You are a Product Designer starting the design phase for [PROJECT_NAME].
+Before proposing any design, gather the user's visual preferences.
+
+Ask these questions (one group at a time):
+
+<span class="section-label">GROUP 1 — Feel:</span>
+1. Pick a vibe: Clean/minimal | Bold/confident | Warm/friendly | Technical/precise | Other
+2. Name 2–3 apps or websites whose design you love and why.
+3. Name 1 app whose design you hate. What bothers you about it?
+
+<span class="section-label">GROUP 2 — Visual:</span>
+4. Light mode, dark mode, or user's choice?
+5. Do you have a brand color or palette in mind? (Hex or description)
+   If not, describe the emotion the product should evoke.
+6. Any font preferences? (If none, say "system-default" and I'll suggest.)
+7. Do you have reference images or screenshots? Please upload them now.
+
+<span class="section-label">GROUP 3 — Constraints:</span>
+8. Any brand guidelines to follow? (Logo, colors, dos/don'ts)
+9. Accessibility requirements? (Standard WCAG AA, or stricter?)
+10. Will this be used on mobile primarily, desktop, or both equally?
+
+After collecting answers, summarize in a Style Brief:
+- Design keywords (e.g., "minimal, precise, dark, monochrome with one accent")
+- Color palette (3 colors max: background, text, accent)
+- Typography direction
+- Inspiration references
+- Anti-patterns to avoid
+
+<span class="placeholder">[PROJECT_NAME]: Replace with your product name</span></pre>
+    </div>
+    <div class="prompt-meta-grid">
+      <div class="meta-item"><div class="meta-label">Input</div><div class="meta-value">User preferences, reference images</div></div>
+      <div class="meta-item"><div class="meta-label">Output</div><div class="meta-value">Style Brief (palette, type, vibe)</div></div>
+      <div class="meta-item"><div class="meta-label">Time</div><div class="meta-value">~10 minutes</div></div>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-meta">
+        <div class="prompt-id">P2-02</div>
+        <div class="prompt-name">Design System Brief Generator</div>
+        <div class="prompt-purpose">Generate tokens, type scale, and component patterns from style brief</div>
+      </div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p2_02')">Copy</button>
+    </div>
+    <div class="prompt-body">
+      <pre class="prompt-text" id="p2_02">Using the Style Brief from P2-01, generate a minimal Design System Brief for [PROJECT_NAME].
+
+<span class="section-label">OUTPUT FORMAT:</span>
+
+## Color Tokens
+- Background: [HEX]
+- Surface: [HEX]
+- Text Primary: [HEX]
+- Text Secondary: [HEX]
+- Accent: [HEX]
+- Error: [HEX]
+- Success: [HEX]
+- Border: [HEX]
+
+## Typography
+- Display: [Font name, weight, size — used for headings]
+- Body: [Font name, weight, size — used for paragraphs]
+- Mono: [Font name — used for code or data]
+- Scale: H1 / H2 / H3 / Body / Caption / Label
+
+## Spacing
+- Base unit: 4px
+- Scale: 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64
+
+## Component Patterns
+- Button (Primary / Secondary / Ghost / Destructive)
+- Input field (default, focused, error, disabled)
+- Card
+- Navigation bar
+- Modal/Sheet
+
+## Accessibility
+- Minimum contrast ratio: 4.5:1 (WCAG AA)
+- Touch target minimum: 44×44px
+- Focus visible: always on
+
+## Anti-patterns (from user input)
+- [List what NOT to use: gradients, drop shadows, rounded corners, etc.]
+
+<span class="placeholder">[PROJECT_NAME]: Replace with your product name</span></pre>
+    </div>
+    <div class="prompt-meta-grid">
+      <div class="meta-item"><div class="meta-label">Input</div><div class="meta-value">Style Brief from P2-01</div></div>
+      <div class="meta-item"><div class="meta-label">Output</div><div class="meta-value">Design system tokens + components</div></div>
+      <div class="meta-item"><div class="meta-label">Time</div><div class="meta-value">~10 minutes</div></div>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-meta">
+        <div class="prompt-id">P2-03</div>
+        <div class="prompt-name">Screen-by-Screen Spec Writer</div>
+        <div class="prompt-purpose">Write a complete spec for every screen before building</div>
+      </div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p2_03')">Copy</button>
+    </div>
+    <div class="prompt-body">
+      <pre class="prompt-text" id="p2_03">Using the MVP Feature List (P1-02) and Design System Brief (P2-02), 
+spec every screen for [PROJECT_NAME].
+
+For EACH screen, output this template:
+
+---
+<span class="section-label">SCREEN:</span> [Screen Name]
+<span class="section-label">ROUTE:</span> [URL or navigation path, e.g., /dashboard]
+<span class="section-label">PURPOSE:</span> [What the user accomplishes on this screen in 1 sentence]
+<span class="section-label">USER ENTRY POINT:</span> [How user gets here]
+<span class="section-label">EXIT POINTS:</span> [Where they go next]
+
+<span class="section-label">LAYOUT:</span>
+- Header: [Nav, back button, title, actions]
+- Body: [Main content area — describe layout]
+- Footer: [Tab bar, CTA, pagination]
+
+<span class="section-label">COMPONENTS:</span>
+- [Component 1]: [What it displays, what it does]
+- [Component 2]: [What it displays, what it does]
+
+<span class="section-label">DATA NEEDED:</span>
+- [Field 1: type, source]
+- [Field 2: type, source]
+
+<span class="section-label">INTERACTIONS:</span>
+- [Action → Result]: e.g., "Tap 'Add Task' → opens bottom sheet"
+- [Action → Result]
+
+<span class="section-label">STATES:</span>
+- Empty state: [What shows when there's no data]
+- Loading state: [Skeleton or spinner]
+- Error state: [What shows on failure]
+- Filled state: [Normal view with data]
+
+<span class="section-label">ACCEPTANCE CRITERIA:</span>
+☐ [Criterion 1]
+☐ [Criterion 2]
+---
+
+Repeat for all screens. List all screens first, then spec each one.
+<span class="placeholder">[PROJECT_NAME]: Replace with your product name</span>
+<span class="placeholder">[SCREENS]: List them — e.g., Onboarding, Home, Detail, Create, Profile, Settings]</span></pre>
+    </div>
+    <div class="prompt-meta-grid">
+      <div class="meta-item"><div class="meta-label">Input</div><div class="meta-value">MVP features, design system</div></div>
+      <div class="meta-item"><div class="meta-label">Output</div><div class="meta-value">Full screen spec for every screen</div></div>
+      <div class="meta-item"><div class="meta-label">Time</div><div class="meta-value">~20 minutes</div></div>
+    </div>
+  </div>
+
+  <div class="gate-block">
+    <div class="gate-label">⚑ Phase 2 Gate — Do not proceed to Phase 3 until:</div>
+    <ul>
+      <li>Design System Brief approved (colors, type, components locked)</li>
+      <li>Every MVP screen has a complete spec</li>
+      <li>All states defined (empty, loading, error, filled)</li>
+      <li>User signed off on style direction</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ P3 ═══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-p3">
+  <div class="phase-header">
+    <div class="phase-tag">Phase 3 — Front-End Build (No-Code)</div>
+    <div class="phase-title">Build the Interface</div>
+    <div class="phase-desc">Translate screen specs into working UI using your chosen no-code tool. Build screen by screen. No back-end yet — use static/mock data. Sprint target: 30–45 minutes.</div>
+    <div class="roles-row">
+      <span class="role-badge eng">No-Code Engineer Agent</span>
+      <span class="role-badge qa">QA Agent</span>
+    </div>
+  </div>
+
+  <div class="info-block">
+    <h3>Recommended No-Code Tool Stack</h3>
+    <ul>
+      <li><strong>Lovable / Bolt.new / v0</strong> — AI-generated React/Next.js UI from prompt. Best for SPAs.</li>
+      <li><strong>Webflow</strong> — Marketing sites, landing pages, CMS-driven content.</li>
+      <li><strong>Bubble</strong> — Complex data-driven web apps with logic and workflows.</li>
+      <li><strong>Glide / Softr</strong> — Mobile-first apps built on top of Airtable/Sheets.</li>
+      <li><strong>FlutterFlow</strong> — Cross-platform mobile apps (iOS + Android) with visual builder.</li>
+    </ul>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-meta">
+        <div class="prompt-id">P3-01</div>
+        <div class="prompt-name">No-Code Tool Selection Prompt</div>
+        <div class="prompt-purpose">Pick the right tool based on product type and requirements</div>
+      </div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p3_01')">Copy</button>
+    </div>
+    <div class="prompt-body">
+      <pre class="prompt-text" id="p3_01">Based on the following product requirements, recommend the best no-code tool stack
+and explain why. Then give an implementation order.
+
+<span class="section-label">PRODUCT CONTEXT:</span>
+- Product Brief: [PASTE FROM P1-03]
+- MVP Features: [LIST FROM P1-02]
+- Platform target: [Web / iOS / Android / All]
+- User scale expected: [< 100 / 100–10K / 10K+]
+- Does it need: Auth? [Y/N] | Database? [Y/N] | Real-time? [Y/N] | Payments? [Y/N]
+  File uploads? [Y/N] | External APIs? [Y/N] | Custom domain? [Y/N]
+
+<span class="section-label">EVALUATE THESE TOOLS:</span>
+Lovable, Bolt.new, v0, Webflow, Bubble, Glide, Softr, FlutterFlow, AppGyver/SAP,
+Supabase (DB+Auth), Airtable, Firebase, Xano, Zapier, Make, Clerk
+
+<span class="section-label">OUTPUT FORMAT:</span>
+1. Recommended primary builder + reason
+2. Recommended database/backend tool + reason
+3. Recommended auth solution + reason
+4. Any integrations needed + tools for each
+5. Known limitations of this stack
+6. Backup option if primary doesn't work
+
+<span class="placeholder">[PASTE FROM P1-03]: Paste your finalized Product Brief</span>
+<span class="placeholder">[LIST FROM P1-02]: Paste your MVP feature list</span></pre>
+    </div>
+    <div class="prompt-meta-grid">
+      <div class="meta-item"><div class="meta-label">Input</div><div class="meta-value">Product Brief, feature list, platform</div></div>
+      <div class="meta-item"><div class="meta-label">Output</div><div class="meta-value">Recommended tool stack with rationale</div></div>
+      <div class="meta-item"><div class="meta-label">Time</div><div class="meta-value">~5 minutes</div></div>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-meta">
+        <div class="prompt-id">P3-02</div>
+        <div class="prompt-name">Screen Build Prompt (Per Screen)</div>
+        <div class="prompt-purpose">Generate an optimized build prompt for each screen — paste directly into Lovable/Bolt/v0</div>
+      </div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p3_02')">Copy</button>
+    </div>
+    <div class="prompt-body">
+      <pre class="prompt-text" id="p3_02">Build the [SCREEN_NAME] screen for [PROJECT_NAME] using [TOOL_NAME].
+
+<span class="section-label">DESIGN TOKENS (apply globally):</span>
+- Background: [HEX]
+- Text: [HEX]
+- Accent: [HEX]
+- Font: [FONT_NAME]
+- Spacing unit: 8px
+
+<span class="section-label">SCREEN SPEC:</span>
+[PASTE FULL SPEC FOR THIS SCREEN FROM P2-03]
+
+<span class="section-label">BUILD INSTRUCTIONS:</span>
+1. Use only the components defined in the design system.
+2. Use static/mock data for now. No backend connections yet.
+3. Make it fully responsive: mobile (375px), tablet (768px), desktop (1280px).
+4. Implement all 4 states: empty, loading, error, filled.
+5. No decorative shadows or gradients unless in spec.
+6. Navigation between screens must be wired up with placeholder routes.
+
+<span class="section-label">WHAT TO OUTPUT:</span>
+- Working screen component
+- Component list used
+- Any design tokens or variables defined
+- Navigation connections
+
+After this screen is built, pause and await review before building the next screen.
+
+<span class="placeholder">[SCREEN_NAME]: e.g., Dashboard, Onboarding, Task Detail</span>
+<span class="placeholder">[PROJECT_NAME]: Your product name</span>
+<span class="placeholder">[TOOL_NAME]: e.g., Lovable, Bolt.new, v0</span>
+<span class="placeholder">[PASTE FULL SPEC]: Paste screen spec from P2-03</span></pre>
+    </div>
+    <div class="prompt-meta-grid">
+      <div class="meta-item"><div class="meta-label">Input</div><div class="meta-value">Screen spec, design tokens, tool</div></div>
+      <div class="meta-item"><div class="meta-label">Output</div><div class="meta-value">Working screen in no-code tool</div></div>
+      <div class="meta-item"><div class="meta-label">Repeat</div><div class="meta-value">Once per screen</div></div>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-meta">
+        <div class="prompt-id">P3-03</div>
+        <div class="prompt-name">Responsive & Navigation Audit Prompt</div>
+        <div class="prompt-purpose">Verify responsiveness and flow between all screens before moving on</div>
+      </div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p3_03')">Copy</button>
+    </div>
+    <div class="prompt-body">
+      <pre class="prompt-text" id="p3_03">All screens for [PROJECT_NAME] have been built. Now audit the front-end build.
+
+<span class="section-label">RESPONSIVE AUDIT (test each breakpoint):</span>
+For each screen at 375px / 768px / 1280px:
+☐ No horizontal overflow
+☐ Typography scales correctly (no tiny text on mobile)
+☐ Touch targets ≥ 44px on mobile
+☐ Images/icons resize properly
+☐ Navigation is accessible on all breakpoints
+
+<span class="section-label">NAVIGATION AUDIT:</span>
+List all screens and verify:
+☐ Every screen is reachable from the app
+☐ Back navigation works correctly
+☐ Deep links resolve to the right screen
+☐ No broken routes or dead ends
+
+<span class="section-label">DESIGN CONSISTENCY AUDIT:</span>
+☐ Color tokens used consistently (no hardcoded hex in individual components)
+☐ Font scale applied globally
+☐ Spacing is consistent with 8px grid
+☐ Button styles are consistent across screens
+☐ Empty / loading / error states present on all data-dependent screens
+
+<span class="section-label">OUTPUT:</span>
+- Audit report (pass / fail per item)
+- List of issues found with screen reference
+- Priority: critical (blocks UX) / minor (visual polish)
+- Estimated fix time per issue
+
+<span class="placeholder">[PROJECT_NAME]: Replace with your product name</span></pre>
+    </div>
+    <div class="prompt-meta-grid">
+      <div class="meta-item"><div class="meta-label">Input</div><div class="meta-value">Completed FE build</div></div>
+      <div class="meta-item"><div class="meta-label">Output</div><div class="meta-value">Audit report, issue list</div></div>
+      <div class="meta-item"><div class="meta-label">Gate</div><div class="meta-value">0 critical issues before Phase 4</div></div>
+    </div>
+  </div>
+
+  <div class="gate-block">
+    <div class="gate-label">⚑ Phase 3 Gate — Do not proceed to Phase 4 until:</div>
+    <ul>
+      <li>All MVP screens are built and wired up</li>
+      <li>Responsive audit passed on 375px, 768px, 1280px</li>
+      <li>All 4 states implemented (empty, loading, error, filled)</li>
+      <li>User has reviewed and approved the front-end</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ P4 ═══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-p4">
+  <div class="phase-header">
+    <div class="phase-tag">Phase 4 — Back-End, Data & Integrations</div>
+    <div class="phase-title">Wire Up the Logic</div>
+    <div class="phase-desc">Connect data, authentication, APIs, and automation. Keep it no-code — Supabase, Airtable, Firebase, Xano, and Zapier/Make cover most use cases. Sprint target: 30–45 minutes.</div>
+    <div class="roles-row">
+      <span class="role-badge eng">No-Code Engineer Agent</span>
+      <span class="role-badge sec">Security Agent</span>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-meta">
+        <div class="prompt-id">P4-01</div>
+        <div class="prompt-name">Data Model Generator</div>
+        <div class="prompt-purpose">Design the database schema from feature and screen requirements</div>
+      </div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p4_01')">Copy</button>
+    </div>
+    <div class="prompt-body">
+      <pre class="prompt-text" id="p4_01">Based on the MVP features and screen specs for [PROJECT_NAME], 
+design a minimal data model. Use [SUPABASE / AIRTABLE / FIREBASE].
+
+<span class="section-label">INSTRUCTIONS:</span>
+1. List all entities (tables/collections) the product needs.
+2. For each entity, define:
+   - Table name
+   - Fields: name | type | required | description
+   - Relationships: FK references, one-to-many, many-to-many
+   - Row-level security rules (who can read/write this row)
+3. Keep it minimal. Only create what's needed for MVP.
+4. Flag any data that is PII (personally identifiable information).
+
+<span class="section-label">OUTPUT FORMAT:</span>
+
+## Table: [TABLE_NAME]
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| id | uuid | yes | Primary key |
+| created_at | timestamp | yes | Auto-generated |
+| [field] | [type] | [y/n] | [description] |
+
+Relationships:
+- [TABLE] → [OTHER_TABLE]: [one-to-many / many-to-many]
+
+RLS Rules:
+- Read: [who can read]
+- Write: [who can write]
+- Delete: [who can delete]
+
+PII Fields: [list any]
+
+---
+Repeat for all tables. Then generate SQL (if Supabase) or schema setup instructions.
+
+<span class="placeholder">[PROJECT_NAME]: Replace with your product name</span>
+<span class="placeholder">[SUPABASE / AIRTABLE / FIREBASE]: Choose your database tool</span></pre>
+    </div>
+    <div class="prompt-meta-grid">
+      <div class="meta-item"><div class="meta-label">Input</div><div class="meta-value">Screen specs, feature list, DB tool</div></div>
+      <div class="meta-item"><div class="meta-label">Output</div><div class="meta-value">Full data schema with RLS rules</div></div>
+      <div class="meta-item"><div class="meta-label">Time</div><div class="meta-value">~15 minutes</div></div>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-meta">
+        <div class="prompt-id">P4-02</div>
+        <div class="prompt-name">Auth & Permissions Setup</div>
+        <div class="prompt-purpose">Configure authentication and user role logic</div>
+      </div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p4_02')">Copy</button>
+    </div>
+    <div class="prompt-body">
+      <pre class="prompt-text" id="p4_02">Set up authentication and permissions for [PROJECT_NAME] using [AUTH_TOOL].
+
+<span class="section-label">AUTH REQUIREMENTS:</span>
+- Auth methods needed: [Email/Password | Google OAuth | Magic Link | Phone OTP | Guest]
+- User roles: [e.g., Admin, Member, Guest — describe what each can do]
+- Protected routes: [List screens that require auth]
+- Public routes: [List screens accessible without auth]
+
+<span class="section-label">SETUP INSTRUCTIONS:</span>
+1. Configure auth provider in [AUTH_TOOL].
+2. Create a users table with: id, email, role, created_at, [custom fields].
+3. Define redirect behavior:
+   - On successful login → [SCREEN]
+   - On logout → [SCREEN]
+   - On unauthorized access → [SCREEN]
+4. Implement session persistence (remember me / token expiry rules).
+5. Set up email templates for: verification, password reset, welcome.
+
+<span class="section-label">PERMISSION MATRIX:</span>
+For each role, what can they do?
+| Action | Admin | Member | Guest |
+|--------|-------|--------|-------|
+| [Action 1] | ✓ | ✓ | ✗ |
+| [Action 2] | ✓ | ✗ | ✗ |
+
+<span class="section-label">SECURITY CHECKLIST:</span>
+☐ API keys stored in environment variables (not in frontend code)
+☐ Row-level security enabled on all tables
+☐ Email verification required before access
+☐ Password strength requirements set (min 8 chars, 1 special char)
+☐ Session timeout configured
+
+<span class="placeholder">[PROJECT_NAME]: Replace with your product name</span>
+<span class="placeholder">[AUTH_TOOL]: e.g., Supabase Auth, Clerk, Firebase Auth</span>
+<span class="placeholder">[USER ROLES]: Define your own — Admin/Member/Guest is just an example</span></pre>
+    </div>
+    <div class="prompt-meta-grid">
+      <div class="meta-item"><div class="meta-label">Input</div><div class="meta-value">User roles, auth method, protected routes</div></div>
+      <div class="meta-item"><div class="meta-label">Output</div><div class="meta-value">Auth config, permissions matrix</div></div>
+      <div class="meta-item"><div class="meta-label">Time</div><div class="meta-value">~10 minutes</div></div>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-meta">
+        <div class="prompt-id">P4-03</div>
+        <div class="prompt-name">Automation & API Integration Prompt</div>
+        <div class="prompt-purpose">Wire up Zapier/Make automations and external API connections</div>
+      </div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p4_03')">Copy</button>
+    </div>
+    <div class="prompt-body">
+      <pre class="prompt-text" id="p4_03">Design the automation and API integration layer for [PROJECT_NAME].
+
+<span class="section-label">INTEGRATIONS NEEDED:</span>
+[List from product brief — e.g., Email notifications, Stripe payments, 
+Slack alerts, Google Sheets sync, Twilio SMS, OpenAI API, etc.]
+
+For each integration, output:
+
+---
+<span class="section-label">INTEGRATION:</span> [Name]
+<span class="section-label">TOOL:</span> [Zapier / Make / n8n / Native no-code connector]
+<span class="section-label">TRIGGER:</span> [What event starts this — e.g., "New row in Supabase"]
+<span class="section-label">ACTION:</span> [What happens — e.g., "Send email via SendGrid"]
+<span class="section-label">DATA PASSED:</span> [Fields mapped from trigger to action]
+<span class="section-label">ERROR HANDLING:</span> [What happens if it fails]
+<span class="section-label">TEST CASE:</span> [How to verify it's working]
+---
+
+After all automations are listed:
+☐ Test each automation with a real trigger
+☐ Confirm data is passing correctly between steps
+☐ Set up error notifications (email or Slack alert on failure)
+☐ Document webhook URLs and store securely
+
+<span class="placeholder">[PROJECT_NAME]: Replace with your product name</span>
+<span class="placeholder">[List integrations]: Email? Payments? Analytics? Notifications?</span></pre>
+    </div>
+    <div class="prompt-meta-grid">
+      <div class="meta-item"><div class="meta-label">Input</div><div class="meta-value">Required integrations from brief</div></div>
+      <div class="meta-item"><div class="meta-label">Output</div><div class="meta-value">Automation specs per integration</div></div>
+      <div class="meta-item"><div class="meta-label">Time</div><div class="meta-value">~15 minutes</div></div>
+    </div>
+  </div>
+
+  <div class="gate-block">
+    <div class="gate-label">⚑ Phase 4 Gate — Do not proceed to Phase 5 until:</div>
+    <ul>
+      <li>Data model finalized and tables created in DB tool</li>
+      <li>Auth working end-to-end (signup, login, logout, protected routes)</li>
+      <li>RLS enabled on all tables with correct rules</li>
+      <li>All integrations tested with real data</li>
+      <li>No API keys in frontend code</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ P5 ═══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-p5">
+  <div class="phase-header">
+    <div class="phase-tag">Phase 5 — Testing, Iteration & Quality</div>
+    <div class="phase-title">Break It Before Users Do</div>
+    <div class="phase-desc">Structured, sprint-style testing across functional, UX, responsive, and security dimensions. Bugs caught here cost 10x less than bugs found post-launch. Sprint target: 20–30 minutes.</div>
+    <div class="roles-row">
+      <span class="role-badge qa">QA Agent</span>
+      <span class="role-badge sec">Security Agent</span>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-meta">
+        <div class="prompt-id">P5-01</div>
+        <div class="prompt-name">Test Plan Generator</div>
+        <div class="prompt-purpose">Generate structured test cases from screen specs and acceptance criteria</div>
+      </div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p5_01')">Copy</button>
+    </div>
+    <div class="prompt-body">
+      <pre class="prompt-text" id="p5_01">Generate a complete test plan for [PROJECT_NAME] from the screen specs and acceptance criteria.
+
+<span class="section-label">TEST COVERAGE REQUIRED:</span>
+1. Happy path (primary user journey end-to-end)
+2. Edge cases (empty inputs, max length, no data states)
+3. Error states (network failure, invalid input, auth failure)
+4. Responsive (375px, 768px, 1280px)
+5. Cross-browser (Chrome, Safari, Firefox minimum)
+6. Auth flows (signup, login, password reset, logout, session expiry)
+
+<span class="section-label">OUTPUT FORMAT (per test case):</span>
+
+| ID | Screen | Test | Steps | Expected | Priority |
+|----|--------|------|-------|----------|----------|
+| T01 | [Screen] | [What's being tested] | 1. Do X 2. Do Y | [Expected result] | Critical/Major/Minor |
+
+<span class="section-label">ACCEPTANCE CRITERIA REVIEW:</span>
+For each screen's acceptance criteria (from P2-03), write a corresponding test case.
+
+<span class="section-label">BUG LOG TEMPLATE:</span>
+| BUG-ID | Screen | Description | Steps to Reproduce | Severity | Status |
+|--------|--------|-------------|-------------------|----------|--------|
+
+<span class="section-label">SIGN-OFF CHECKLIST:</span>
+☐ All critical path tests passing
+☐ No critical or high severity bugs open
+☐ All 4 states working on all screens
+☐ Auth flows working end-to-end
+☐ Responsive on 3 breakpoints
+☐ Performance: page load under 3 seconds
+
+<span class="placeholder">[PROJECT_NAME]: Replace with your product name</span></pre>
+    </div>
+    <div class="prompt-meta-grid">
+      <div class="meta-item"><div class="meta-label">Input</div><div class="meta-value">Screen specs, acceptance criteria</div></div>
+      <div class="meta-item"><div class="meta-label">Output</div><div class="meta-value">Test plan, bug log template</div></div>
+      <div class="meta-item"><div class="meta-label">Time</div><div class="meta-value">~15 minutes</div></div>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-meta">
+        <div class="prompt-id">P5-02</div>
+        <div class="prompt-name">Security Audit Prompt</div>
+        <div class="prompt-purpose">Run a structured security review before any public deployment</div>
+      </div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p5_02')">Copy</button>
+    </div>
+    <div class="prompt-body">
+      <pre class="prompt-text" id="p5_02">Run a pre-launch security audit for [PROJECT_NAME].
+
+<span class="section-label">AUDIT AREAS:</span>
+
+1. <span class="section-label">API Key Exposure</span>
+   ☐ No API keys in frontend JS code
+   ☐ All secrets in environment variables
+   ☐ No keys in git history
+
+2. <span class="section-label">Database Security</span>
+   ☐ RLS enabled on ALL tables
+   ☐ No tables publicly readable without auth
+   ☐ Admin operations require admin role check
+   ☐ No direct DB URL exposed in frontend
+
+3. <span class="section-label">Auth Security</span>
+   ☐ Session tokens expire correctly
+   ☐ Logout invalidates session on server
+   ☐ Password reset links expire in 1 hour
+   ☐ Email verification enforced
+
+4. <span class="section-label">Input Validation</span>
+   ☐ All form inputs sanitized
+   ☐ File upload types restricted (if applicable)
+   ☐ Max input lengths enforced
+   ☐ SQL injection not possible (parameterized queries)
+
+5. <span class="section-label">Data Privacy</span>
+   ☐ PII fields identified and noted
+   ☐ Data deletion workflow exists (if required by GDPR)
+   ☐ Privacy policy page exists (if collecting personal data)
+
+<span class="section-label">RISK MATRIX OUTPUT:</span>
+| Vulnerability | Risk Level | Mitigation | Status |
+|---------------|------------|------------|--------|
+| [Issue] | High/Med/Low | [Fix] | Open/Resolved |
+
+All HIGH risks must be resolved before launch.
+
+<span class="placeholder">[PROJECT_NAME]: Replace with your product name</span></pre>
+    </div>
+    <div class="prompt-meta-grid">
+      <div class="meta-item"><div class="meta-label">Input</div><div class="meta-value">Full build (FE + BE + Auth)</div></div>
+      <div class="meta-item"><div class="meta-label">Output</div><div class="meta-value">Risk matrix, security sign-off</div></div>
+      <div class="meta-item"><div class="meta-label">Gate</div><div class="meta-value">All HIGH risks resolved</div></div>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-meta">
+        <div class="prompt-id">P5-03</div>
+        <div class="prompt-name">Rapid Iteration Prompt</div>
+        <div class="prompt-purpose">Structured fix-and-verify loop for each bug found in testing</div>
+      </div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p5_03')">Copy</button>
+    </div>
+    <div class="prompt-body">
+      <pre class="prompt-text" id="p5_03">Fix the following bug in [PROJECT_NAME] and verify the fix.
+
+<span class="section-label">BUG REPORT:</span>
+- Screen: [SCREEN_NAME]
+- Description: [What's wrong]
+- Steps to reproduce: [1. Do X, 2. Do Y, 3. See Z]
+- Expected behavior: [What should happen]
+- Severity: [Critical / Major / Minor]
+
+<span class="section-label">FIX INSTRUCTIONS:</span>
+1. Identify the root cause (not just the symptom).
+2. Fix it in the no-code tool. Do NOT introduce new dependencies.
+3. Do NOT break other screens while fixing this one.
+4. After fixing, test:
+   ☐ Bug is gone
+   ☐ Adjacent screens still work
+   ☐ Fix works on mobile (375px) too
+
+<span class="section-label">VERIFICATION:</span>
+State: "Bug [BUG-ID] is fixed. Verified by: [test steps]. No regressions observed on: [screens checked]."
+
+Update the bug log status to: Resolved.
+
+<span class="placeholder">[SCREEN_NAME]: Screen where the bug occurs</span>
+<span class="placeholder">[What's wrong, repro steps]: Fill in from your bug log</span></pre>
+    </div>
+    <div class="prompt-meta-grid">
+      <div class="meta-item"><div class="meta-label">Input</div><div class="meta-value">Bug report from test plan</div></div>
+      <div class="meta-item"><div class="meta-label">Output</div><div class="meta-value">Fixed bug + verification statement</div></div>
+      <div class="meta-item"><div class="meta-label">Repeat</div><div class="meta-value">Once per critical/major bug</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ P6 ═══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-p6">
+  <div class="phase-header">
+    <div class="phase-tag">Phase 6 — Deployment, Scaling & Maintenance</div>
+    <div class="phase-title">Ship It Right</div>
+    <div class="phase-desc">Deploy with a production checklist, set up analytics and monitoring, create the landing page, and plan for scaling. Sprint target: 20–30 minutes.</div>
+    <div class="roles-row">
+      <span class="role-badge eng">No-Code Engineer Agent</span>
+      <span class="role-badge pm">PM Agent</span>
+      <span class="role-badge sec">Security Agent</span>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-meta">
+        <div class="prompt-id">P6-01</div>
+        <div class="prompt-name">Pre-Launch Deployment Checklist</div>
+        <div class="prompt-purpose">Run through every critical check before going live</div>
+      </div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p6_01')">Copy</button>
+    </div>
+    <div class="prompt-body">
+      <pre class="prompt-text" id="p6_01">Run the pre-launch deployment checklist for [PROJECT_NAME] on [NO_CODE_TOOL].
+
+<span class="section-label">PRODUCTION ENVIRONMENT:</span>
+☐ Production environment variables set (not dev keys)
+☐ Custom domain configured and SSL active
+☐ 404 and error pages set up
+☐ Favicon and app icon added
+☐ Meta tags (title, description, OG image) set
+
+<span class="section-label">PERFORMANCE:</span>
+☐ Images compressed and optimized
+☐ Lazy loading on below-the-fold content
+☐ Load time < 3s on mobile (test with PageSpeed Insights)
+☐ No unnecessary third-party scripts
+
+<span class="section-label">ANALYTICS & MONITORING:</span>
+☐ Google Analytics 4 or PostHog installed
+☐ Error monitoring set up (Sentry or tool-native)
+☐ Uptime monitoring configured (UptimeRobot — free)
+☐ North Star metric event tracked
+
+<span class="section-label">LEGAL & COMPLIANCE:</span>
+☐ Privacy policy page live (if collecting personal data)
+☐ Terms of service page live (if needed)
+☐ Cookie consent banner (if using tracking in EU)
+
+<span class="section-label">BACKUPS:</span>
+☐ Database backup schedule configured
+☐ Version history / snapshots taken before launch
+
+<span class="section-label">FINAL SIGN-OFF:</span>
+☐ User has reviewed live staging environment
+☐ All Phase 5 sign-offs confirmed
+☐ Support/feedback mechanism live (Tally form or email)
+☐ Ready to launch 🚀
+
+<span class="placeholder">[PROJECT_NAME]: Replace with your product name</span>
+<span class="placeholder">[NO_CODE_TOOL]: Your builder — Lovable, Webflow, Bubble, etc.</span></pre>
+    </div>
+    <div class="prompt-meta-grid">
+      <div class="meta-item"><div class="meta-label">Input</div><div class="meta-value">Completed, tested build</div></div>
+      <div class="meta-item"><div class="meta-label">Output</div><div class="meta-value">Deployment-ready product</div></div>
+      <div class="meta-item"><div class="meta-label">Time</div><div class="meta-value">~15 minutes</div></div>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-meta">
+        <div class="prompt-id">P6-02</div>
+        <div class="prompt-name">Landing Page Builder Prompt</div>
+        <div class="prompt-purpose">Create a high-converting landing page that drives users to the product</div>
+      </div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p6_02')">Copy</button>
+    </div>
+    <div class="prompt-body">
+      <pre class="prompt-text" id="p6_02">Build a minimal, high-converting landing page for [PROJECT_NAME] using [TOOL — Webflow / Framer / Lovable].
+
+<span class="section-label">PRODUCT CONTEXT:</span>
+- What it does: [1 line from Product Brief]
+- Target user: [Persona from P1]
+- Primary CTA: [Sign Up / Start Free / Get Access / Waitlist]
+- Design tokens: [Same as product — Background HEX, Text HEX, Accent HEX, Font]
+
+<span class="section-label">SECTIONS (in order):</span>
+1. Hero — Headline, subheadline, CTA button, hero image/animation
+2. Problem — "If you've ever..." empathy statement (3 pain points max)
+3. Solution — How [PROJECT_NAME] fixes it (3 features, icon + description format)
+4. Social proof — Logos, testimonials, or "used by X people" counter
+5. How it works — 3-step visual process
+6. Final CTA — Repeat the primary CTA with urgency
+7. Footer — Links, copyright, social, privacy policy
+
+<span class="section-label">COPY GUIDELINES:</span>
+- Headline: Outcome-focused, not feature-focused. e.g., "Ship faster" not "A fast build tool"
+- No jargon. Write at 8th-grade reading level.
+- Every section has ONE job. Don't mix messages.
+
+<span class="section-label">TECHNICAL:</span>
+- Link CTA to: [PRODUCT_URL / signup page]
+- Add Google Analytics tracking on CTA clicks
+- Responsive: mobile-first
+
+<span class="placeholder">[PROJECT_NAME, TOOL, PRODUCT_URL]: Fill in your details</span>
+<span class="placeholder">[Design tokens]: Paste from P2-02</span></pre>
+    </div>
+    <div class="prompt-meta-grid">
+      <div class="meta-item"><div class="meta-label">Input</div><div class="meta-value">Product Brief, design tokens, CTA URL</div></div>
+      <div class="meta-item"><div class="meta-label">Output</div><div class="meta-value">Live landing page with tracking</div></div>
+      <div class="meta-item"><div class="meta-label">Time</div><div class="meta-value">~20 minutes</div></div>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-meta">
+        <div class="prompt-id">P6-03</div>
+        <div class="prompt-name">Scaling & Maintenance Playbook</div>
+        <div class="prompt-purpose">Set up versioning, monitoring, and a scaling plan post-launch</div>
+      </div>
+      <button class="copy-btn" onclick="copyPrompt(this, 'p6_03')">Copy</button>
+    </div>
+    <div class="prompt-body">
+      <pre class="prompt-text" id="p6_03">Create a post-launch maintenance and scaling playbook for [PROJECT_NAME].
+
+<span class="section-label">MONITORING SETUP:</span>
+1. Uptime: UptimeRobot — alert on [email/Slack] if site is down > 2 min
+2. Errors: Sentry (or tool-native error logs) — alert on any unhandled exception
+3. Performance: Weekly Google PageSpeed check, alert if score drops below 80
+4. Analytics: Weekly review of North Star metric ([METRIC]) in GA4/PostHog
+
+<span class="section-label">VERSIONING:</span>
+- Before every major change: take a snapshot/backup of the current build
+- Maintain a changelog: [Date | Change | Who]
+- Tag releases: v1.0 (launch), v1.1, v1.2 etc.
+
+<span class="section-label">SCALING TRIGGERS:</span>
+At what point do you upgrade?
+| Metric | Threshold | Action |
+|--------|-----------|--------|
+| Users | > 1,000 MAU | Upgrade DB tier |
+| Storage | > 80% used | Add capacity |
+| API calls | Near rate limit | Upgrade plan or cache |
+| Load time | > 4s on mobile | Optimize assets |
+
+<span class="section-label">COMMON MAINTENANCE TASKS (monthly):</span>
+☐ Review and rotate API keys
+☐ Check for unused automations / zombie Zapier zaps
+☐ Review user feedback and triage to backlog
+☐ Run security audit (P5-02) again
+☐ Check for no-code tool updates and apply
+
+<span class="section-label">FEEDBACK LOOP:</span>
+1. Embed a feedback widget (Tally / Typeform / HotJar poll)
+2. Review weekly. Map to: Bug / Feature request / UX issue
+3. Prioritize using: Impact × Effort matrix
+4. Ship a small improvement every 2 weeks
+
+<span class="placeholder">[PROJECT_NAME]: Replace with your product name</span>
+<span class="placeholder">[METRIC]: Your North Star metric from P1-02</span></pre>
+    </div>
+    <div class="prompt-meta-grid">
+      <div class="meta-item"><div class="meta-label">Input</div><div class="meta-value">Live product, analytics setup</div></div>
+      <div class="meta-item"><div class="meta-label">Output</div><div class="meta-value">Monitoring, versioning, scaling plan</div></div>
+      <div class="meta-item"><div class="meta-label">Time</div><div class="meta-value">~10 minutes</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ EXAMPLE ═══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-example">
+  <div class="phase-header">
+    <div class="phase-tag">MVP Example Run — Task Tracker App</div>
+    <div class="phase-title">See the Full Workflow In Action</div>
+    <div class="phase-desc">A complete walkthrough of all 6 phases applied to a simple "Task Tracker" app. Use this as your reference for how to fill in the placeholders for your own product.</div>
+  </div>
+
+  <div class="example-box">
+    <div class="example-header">P1-01 → Problem Statement Output</div>
+    <div class="example-content">
+      <strong>Product:</strong> TaskFlow — a minimal task manager for solo founders and freelancers<br><br>
+      <strong>Problem Statement:</strong> Solo founders and freelancers lose track of daily tasks because general project tools (Notion, Asana) are overbuilt for one person and require too much setup. They end up juggling sticky notes, browser tabs, and half-empty Notion pages.<br><br>
+      <strong>Product Hypothesis:</strong> We believe solo founders will complete more tasks per day if they have a single-screen, frictionless task list that starts them in under 10 seconds.<br><br>
+      <strong>Top 3 Assumptions:</strong> Users open task manager &gt; once/day · Users want tags or priority levels · Users prefer web over mobile for this use case
+    </div>
+  </div>
+
+  <div class="example-box">
+    <div class="example-header">P1-02 → MVP Feature List</div>
+    <div class="example-content">
+      <strong>MUST-HAVE:</strong><br>
+      ✓ Add task (title, due date, optional priority)<br>
+      ✓ Mark task complete<br>
+      ✓ Filter by: All / Active / Completed<br>
+      ✓ Persistent storage (tasks saved on refresh)<br><br>
+      <strong>OUT OF SCOPE (v1):</strong> Team sharing · Recurring tasks · Integrations · Mobile app · Comments<br><br>
+      <strong>North Star:</strong> Tasks completed per user per week<br>
+      <strong>KPI 1:</strong> DAU (opens per day)<br>
+      <strong>KPI 2:</strong> Task completion rate (completed ÷ created)
+    </div>
+  </div>
+
+  <div class="example-box">
+    <div class="example-header">P2-02 → Design System Brief (TaskFlow)</div>
+    <div class="example-content">
+      <strong>Color Tokens:</strong> Background: #F9F8F5 · Surface: #FFFFFF · Text: #1C1B18 · Text-2: #6B6860 · Accent: #1C1B18 · Border: #E4E2DA<br><br>
+      <strong>Typography:</strong> Display: Syne 700 · Body: DM Sans 400/500 · Mono: DM Mono 400<br><br>
+      <strong>Vibe:</strong> Minimal, editorial, no gradients, no shadows. Like a well-designed notebook.<br><br>
+      <strong>Anti-patterns:</strong> No colored backgrounds · No rounded pill buttons · No emojis in UI
+    </div>
+  </div>
+
+  <div class="example-box">
+    <div class="example-header">P2-03 → Screen Spec: Home (Task List)</div>
+    <div class="example-content">
+      <strong>Screen:</strong> Home — Task List<br>
+      <strong>Route:</strong> /<br>
+      <strong>Purpose:</strong> User sees all tasks, can add a new one, and mark complete<br><br>
+      <strong>Layout:</strong> Header (logo + "Add Task" button) · Body (task list, filter tabs) · No footer<br><br>
+      <strong>Components:</strong> Task row (checkbox, title, due date, priority chip) · Filter tabs (All / Active / Done) · Empty state ("Nothing here. Add your first task.") · Add Task bottom sheet (title input, date picker, priority select)<br><br>
+      <strong>Acceptance Criteria:</strong><br>
+      ☐ Task appears in list immediately after adding<br>
+      ☐ Checking checkbox moves task to "Done" filter<br>
+      ☐ Empty state shows when no tasks in current filter
+    </div>
+  </div>
+
+  <div class="example-box">
+    <div class="example-header">P3-02 → Build Prompt for Lovable</div>
+    <div class="example-content" style="font-family:'DM Mono',monospace;font-size:12px;white-space:pre-wrap;">Build the Home screen for TaskFlow using Lovable.
+
+Design tokens: BG #F9F8F5, Text #1C1B18, Accent #1C1B18, Font: DM Sans
+Layout: Top bar with "TaskFlow" logo (Syne 700) + "Add" button (top right)
+Body: Tab row (All / Active / Done) + task list below
+Task row: Checkbox (left) + task title + due date (right) + optional priority tag (small chip)
+Empty state: Centered text "Nothing here yet." with a light subtext "Add your first task above."
+
+Make it fully responsive. Mobile-first. No shadows. No gradients. Use 8px spacing grid.
+Static data for now — use 3 dummy tasks.</div>
+  </div>
+
+  <div class="example-box">
+    <div class="example-header">P4-01 → Data Model (Supabase)</div>
+    <div class="example-content" style="font-family:'DM Mono',monospace;font-size:12px;">
+Table: tasks<br>
+id | uuid | PK<br>
+user_id | uuid | FK → auth.users<br>
+title | text | required<br>
+due_date | date | optional<br>
+priority | enum(low,medium,high) | default: medium<br>
+completed | boolean | default: false<br>
+created_at | timestamp | auto<br><br>
+RLS: Read/Write only where user_id = auth.uid()
+    </div>
+  </div>
+
+  <div class="example-box">
+    <div class="example-header">Timeline Summary — TaskFlow MVP in ~2 Hours</div>
+    <div class="example-content">
+      <strong>0:00–0:25</strong> → P1: Ideation, problem statement, feature scoping, Product Brief<br>
+      <strong>0:25–0:55</strong> → P2: Style brief, design system, screen specs (3 screens)<br>
+      <strong>0:55–1:25</strong> → P3: Build all 3 screens in Lovable, responsive audit<br>
+      <strong>1:25–1:45</strong> → P4: Supabase schema, Supabase Auth, connect FE to BE<br>
+      <strong>1:45–1:55</strong> → P5: Critical path testing, fix bugs, security checklist<br>
+      <strong>1:55–2:00</strong> → P6: Deploy to custom domain, set up analytics, done. 🚀
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script>
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabPanels = document.querySelectorAll('.tab-panel');
+  const copyAllBtn = document.getElementById('copyAllBtn');
+
+  function getActiveTabPanel() {
+    return document.querySelector('.tab-panel.active');
+  }
+
+  function getAllPromptsText(panel) {
+    if (!panel) return '';
+    const cards = panel.querySelectorAll('.prompt-card');
+    const parts = [];
+
+    cards.forEach(card => {
+      const idEl = card.querySelector('.prompt-id');
+      const nameEl = card.querySelector('.prompt-name');
+      const promptEl = card.querySelector('.prompt-text');
+
+      if (!promptEl) return;
+
+      const header = [
+        idEl ? idEl.innerText.trim() : '',
+        nameEl ? nameEl.innerText.trim() : ''
+      ].filter(Boolean).join(' — ');
+
+      if (header) parts.push(header);
+      parts.push(promptEl.innerText.trim());
+      parts.push('');
+      parts.push('---');
+      parts.push('');
+    });
+
+    const text = parts.join('\n').trim();
+    return text.endsWith('---') ? text.slice(0, -3).trim() : text;
+  }
+
+  function setCopyAllState() {
+    if (!copyAllBtn) return;
+    const panel = getActiveTabPanel();
+    const hasPrompts = !!(panel && panel.querySelector('.prompt-card .prompt-text'));
+    copyAllBtn.disabled = !hasPrompts;
+    copyAllBtn.style.opacity = hasPrompts ? '1' : '0.45';
+    copyAllBtn.style.cursor = hasPrompts ? 'pointer' : 'not-allowed';
+  }
+
+  async function writeToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.top = '-9999px';
+    textarea.style.left = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+    textarea.setSelectionRange(0, textarea.value.length);
+    const ok = document.execCommand('copy');
+    document.body.removeChild(textarea);
+    return ok;
+  }
+
+  function flashButtonState(btn, successLabel, defaultLabel) {
+    const originalLabel = defaultLabel ?? btn.textContent;
+    btn.textContent = successLabel;
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = originalLabel;
+      btn.classList.remove('copied');
+    }, 2000);
+  }
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.tab;
+      const targetPanel = document.getElementById('tab-' + target);
+      if (!targetPanel) return;
+
+      tabBtns.forEach(b => b.classList.remove('active'));
+      tabPanels.forEach(p => p.classList.remove('active'));
+
+      btn.classList.add('active');
+      targetPanel.classList.add('active');
+      setCopyAllState();
+    });
+  });
+
+  async function copyPrompt(btn, id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    try {
+      const ok = await writeToClipboard(el.innerText);
+      if (!ok) throw new Error('copy_failed');
+      flashButtonState(btn, '✓ Copied', 'Copy');
+    } catch (e) {
+      flashButtonState(btn, 'Copy failed', 'Copy');
+    }
+  }
+
+  if (copyAllBtn) {
+    copyAllBtn.addEventListener('click', async () => {
+      const panel = getActiveTabPanel();
+      const text = getAllPromptsText(panel);
+      if (!text) return;
+
+      try {
+        const ok = await writeToClipboard(text);
+        if (!ok) throw new Error('copy_failed');
+        flashButtonState(copyAllBtn, '✓ Copied all', 'Copy all in this tab');
+      } catch (e) {
+        flashButtonState(copyAllBtn, 'Copy failed', 'Copy all in this tab');
+      }
+    });
+  }
+
+  setCopyAllState();
+</script>
+</body>
+</html>
