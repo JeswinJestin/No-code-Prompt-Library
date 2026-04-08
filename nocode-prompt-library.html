@@ -2019,20 +2019,60 @@ RLS: Read/Write only where user_id = auth.uid()
     }, 2000);
   }
 
+  const tabOrder = Array.from(tabBtns).map(b => b.dataset.tab);
+
+  function activateTab(target) {
+    const targetBtn = Array.from(tabBtns).find(b => b.dataset.tab === target);
+    const targetPanel = document.getElementById('tab-' + target);
+    if (!targetBtn || !targetPanel) return;
+
+    tabBtns.forEach(b => b.classList.remove('active'));
+    tabPanels.forEach(p => p.classList.remove('active'));
+
+    targetBtn.classList.add('active');
+    targetPanel.classList.add('active');
+    setCopyAllState();
+  }
+
   tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const target = btn.dataset.tab;
-      const targetPanel = document.getElementById('tab-' + target);
-      if (!targetPanel) return;
-
-      tabBtns.forEach(b => b.classList.remove('active'));
-      tabPanels.forEach(p => p.classList.remove('active'));
-
-      btn.classList.add('active');
-      targetPanel.classList.add('active');
-      setCopyAllState();
-    });
+    btn.addEventListener('click', () => activateTab(btn.dataset.tab));
   });
+
+  function injectPanelNav() {
+    tabOrder.forEach((tabId, idx) => {
+      const panel = document.getElementById('tab-' + tabId);
+      if (!panel) return;
+      if (tabId === 'rapid') return;
+      if (panel.querySelector('.panel-nav')) return;
+
+      const nav = document.createElement('div');
+      nav.className = 'mcq-nav panel-nav';
+
+      if (idx > 0) {
+        const prev = document.createElement('button');
+        prev.type = 'button';
+        prev.className = 'copy-all-btn';
+        prev.textContent = '← Previous';
+        prev.addEventListener('click', () => activateTab(tabOrder[idx - 1]));
+        nav.appendChild(prev);
+      } else {
+        const spacer = document.createElement('div');
+        spacer.style.flex = '1';
+        nav.appendChild(spacer);
+      }
+
+      if (idx < tabOrder.length - 1) {
+        const next = document.createElement('button');
+        next.type = 'button';
+        next.className = 'copy-all-btn';
+        next.textContent = 'Next →';
+        next.addEventListener('click', () => activateTab(tabOrder[idx + 1]));
+        nav.appendChild(next);
+      }
+
+      panel.appendChild(nav);
+    });
+  }
 
   async function copyPrompt(btn, id) {
     const el = document.getElementById(id);
@@ -2063,6 +2103,7 @@ RLS: Read/Write only where user_id = auth.uid()
     });
   }
 
+  injectPanelNav();
   setCopyAllState();
 </script>
 <script type="module" src="./src/app.js"></script>
