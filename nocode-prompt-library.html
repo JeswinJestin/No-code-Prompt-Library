@@ -403,12 +403,119 @@
   .copy-all-btn.copied { background: var(--tag-eng); color: var(--tag-eng-ink); }
   .copy-all-btn:hover { opacity: 0.8; }
 
+  .mcq-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .mcq-select {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    font-size: 12.5px;
+    color: var(--ink);
+  }
+  .mcq-loading {
+    font-size: 12.5px;
+    color: var(--ink-2);
+    margin: 12px 0 18px;
+  }
+  .mcq-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .mcq-q {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  .mcq-help {
+    font-size: 12.5px;
+    color: var(--ink-2);
+    margin-bottom: 10px;
+  }
+  .mcq-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .mcq-option {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 7px 12px;
+    font-size: 12px;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .mcq-option:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .mcq-option.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .mcq-free-label {
+    margin-top: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .mcq-free {
+    width: 100%;
+    margin-top: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 9px 10px;
+    font-size: 12.5px;
+    color: var(--ink);
+  }
+  .mcq-pre {
+    background: var(--prompt-bg);
+    color: var(--prompt-ink);
+    border-radius: var(--radius);
+    padding: 14px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  .mcq-invocations {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .mcq-invocation {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px;
+  }
+  .mcq-invocation-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+  .mcq-invocation-hint {
+    font-size: 12px;
+    color: var(--ink-2);
+    margin-bottom: 10px;
+  }
+
   /* ── RESPONSIVE ── */
   @media (max-width: 640px) {
     header { padding: 24px 20px; flex-direction: column; align-items: flex-start; }
     .tab-nav { padding: 0 16px; }
     main { padding: 24px 16px 60px; }
     .prompt-meta-grid { grid-template-columns: 1fr 1fr; }
+    .mcq-invocations { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -424,6 +531,7 @@
 
 <nav class="tab-nav" id="tabNav">
   <button class="tab-btn active" data-tab="roles"><span class="phase-num">00</span> Roles</button>
+  <button class="tab-btn" data-tab="rapid"><span class="phase-num">RR</span> Rapid</button>
   <button class="tab-btn" data-tab="p1"><span class="phase-num">P1</span> Ideation</button>
   <button class="tab-btn" data-tab="p2"><span class="phase-num">P2</span> Design</button>
   <button class="tab-btn" data-tab="p3"><span class="phase-num">P3</span> Front-End</button>
@@ -1811,6 +1919,23 @@ RLS: Read/Write only where user_id = auth.uid()
   </div>
 </div>
 
+<div class="tab-panel" id="tab-rapid">
+  <div class="phase-header">
+    <div class="phase-tag">Rapid Requirements — Multiple Choice</div>
+    <div class="phase-title">Fast MCQs for Every Stage</div>
+    <div class="phase-desc">Replace open-ended questionnaires with single-click options across ideation, design, front-end, back-end, testing, and deployment. Free-text is optional.</div>
+    <div class="roles-row">
+      <span class="role-badge pm">PM</span>
+      <span class="role-badge ux">UX</span>
+      <span class="role-badge eng">Eng</span>
+      <span class="role-badge qa">QA</span>
+      <span class="role-badge sec">Sec</span>
+    </div>
+  </div>
+
+  <div id="mcqApp"></div>
+</div>
+
 </main>
 
 <script>
@@ -1935,5 +2060,6 @@ RLS: Read/Write only where user_id = auth.uid()
 
   setCopyAllState();
 </script>
+<script type="module" src="./src/app.js"></script>
 </body>
 </html>

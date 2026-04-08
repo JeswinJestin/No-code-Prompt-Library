@@ -1,0 +1,102 @@
+{
+  "version": "1.0",
+  "defaults": {
+    "riskAllowlist": ["safe", "none"],
+    "maxSkills": 8,
+    "perIntentMaxSkills": 2
+  },
+  "intents": [
+    {
+      "id": "plan",
+      "title": "Planning",
+      "priority": 90,
+      "preferredSkillIds": ["brainstorming"],
+      "fallbackQueryTokens": ["plan", "brainstorm", "requirements", "scope"]
+    },
+    {
+      "id": "product-brief",
+      "title": "Product Brief",
+      "priority": 80,
+      "fallbackQueryTokens": ["product", "brief", "prd", "spec"]
+    },
+    {
+      "id": "ux",
+      "title": "UX / UI",
+      "priority": 80,
+      "preferredSkillIds": ["frontend-design"],
+      "fallbackQueryTokens": ["ux", "ui", "design", "accessibility", "wcag"]
+    },
+    {
+      "id": "frontend",
+      "title": "Front-End Build",
+      "priority": 70,
+      "fallbackQueryTokens": ["frontend", "ui", "responsive", "components"]
+    },
+    {
+      "id": "api",
+      "title": "API Design",
+      "priority": 70,
+      "preferredSkillIds": ["api-design-principles"],
+      "fallbackQueryTokens": ["api", "rest", "endpoints", "schema"]
+    },
+    {
+      "id": "database",
+      "title": "Database",
+      "priority": 70,
+      "fallbackQueryTokens": ["database", "postgres", "sql", "schema", "supabase"]
+    },
+    {
+      "id": "auth",
+      "title": "Authentication",
+      "priority": 75,
+      "fallbackQueryTokens": ["auth", "authentication", "session", "jwt", "oauth"]
+    },
+    {
+      "id": "payments",
+      "title": "Payments",
+      "priority": 60,
+      "fallbackQueryTokens": ["payments", "stripe", "billing", "subscriptions"]
+    },
+    {
+      "id": "integrations",
+      "title": "Integrations / Automation",
+      "priority": 55,
+      "fallbackQueryTokens": ["integrations", "zapier", "make", "webhook"]
+    },
+    {
+      "id": "testing",
+      "title": "Testing",
+      "priority": 65,
+      "preferredSkillIds": ["test-driven-development"],
+      "fallbackQueryTokens": ["testing", "qa", "test", "acceptance"]
+    },
+    {
+      "id": "debugging",
+      "title": "Debugging",
+      "priority": 40,
+      "preferredSkillIds": ["debugging-strategies"],
+      "fallbackQueryTokens": ["debug", "troubleshoot", "errors"]
+    },
+    {
+      "id": "security",
+      "title": "Security",
+      "priority": 85,
+      "preferredSkillIds": ["security-auditor"],
+      "fallbackQueryTokens": ["security", "threat", "owasp", "rls"]
+    },
+    {
+      "id": "quality",
+      "title": "Lint / Validate",
+      "priority": 45,
+      "preferredSkillIds": ["lint-and-validate"],
+      "fallbackQueryTokens": ["lint", "validate", "quality"]
+    },
+    {
+      "id": "shipping",
+      "title": "Shipping",
+      "priority": 50,
+      "preferredSkillIds": ["create-pr"],
+      "fallbackQueryTokens": ["release", "deploy", "ship", "github"]
+    }
+  ]
+}

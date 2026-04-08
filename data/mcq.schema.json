@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/mcq-templates.schema.json",
+  "title": "Rapid Requirements MCQ Templates",
+  "type": "object",
+  "required": ["version", "stages"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "questions"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "enum": ["ideation", "design", "frontend", "backend", "testing", "deployment"]
+          },
+          "title": { "type": "string", "minLength": 1 },
+          "description": { "type": "string" },
+          "questions": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": ["id", "type", "prompt", "answers"],
+                  "properties": {
+                    "id": { "type": "string", "minLength": 1 },
+                    "type": { "const": "mcq" },
+                    "prompt": { "type": "string", "minLength": 1 },
+                    "help": { "type": "string" },
+                    "optionalFreeText": {
+                      "type": "object",
+                      "required": ["enabled", "label"],
+                      "properties": {
+                        "enabled": { "type": "boolean" },
+                        "label": { "type": "string", "minLength": 1 },
+                        "placeholder": { "type": "string" }
+                      },
+                      "additionalProperties": false
+                    },
+                    "answers": {
+                      "type": "array",
+                      "minItems": 2,
+                      "maxItems": 8,
+                      "items": {
+                        "type": "object",
+                        "required": ["id", "label", "intents"],
+                        "properties": {
+                          "id": { "type": "string", "minLength": 1 },
+                          "label": { "type": "string", "minLength": 1, "maxLength": 40 },
+                          "value": {},
+                          "intents": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": { "type": "string", "minLength": 1 }
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "type", "prompt", "text"],
+                  "properties": {
+                    "id": { "type": "string", "minLength": 1 },
+                    "type": { "const": "text" },
+                    "prompt": { "type": "string", "minLength": 1 },
+                    "help": { "type": "string" },
+                    "gatesFollowing": { "type": "boolean" },
+                    "text": {
+                      "type": "object",
+                      "required": ["required", "label"],
+                      "properties": {
+                        "required": { "type": "boolean" },
+                        "label": { "type": "string", "minLength": 1 },
+                        "placeholder": { "type": "string" },
+                        "maxLength": { "type": "integer", "minimum": 1 }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

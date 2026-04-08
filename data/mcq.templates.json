@@ -1,0 +1,225 @@
+{
+  "version": "1.0",
+  "stages": [
+    {
+      "id": "ideation",
+      "title": "Ideation",
+      "description": "Lock scope and success criteria with <3s clicks.",
+      "questions": [
+        {
+          "id": "initial_description",
+          "type": "text",
+          "prompt": "Describe what you’re building (1 sentence)",
+          "help": "This captures the original requirements. Next, answer quick MCQs to clarify scope.",
+          "gatesFollowing": true,
+          "text": {
+            "required": true,
+            "label": "Required",
+            "placeholder": "e.g., A booking app for local fitness classes",
+            "maxLength": 160
+          }
+        },
+        {
+          "id": "target_user",
+          "type": "mcq",
+          "prompt": "Who is this for?",
+          "answers": [
+            { "id": "b2c", "label": "Consumers (B2C)", "intents": ["product-brief", "ux"] },
+            { "id": "b2b", "label": "Teams (B2B)", "intents": ["product-brief", "ux", "api"] },
+            { "id": "internal", "label": "Internal users", "intents": ["product-brief", "api", "database"] },
+            { "id": "devs", "label": "Developers", "intents": ["product-brief", "api"] }
+          ]
+        },
+        {
+          "id": "timeline",
+          "type": "mcq",
+          "prompt": "Timeline for MVP?",
+          "answers": [
+            { "id": "hours", "label": "Today", "intents": ["plan"] },
+            { "id": "week", "label": "This week", "intents": ["plan", "testing"] },
+            { "id": "month", "label": "This month", "intents": ["plan", "testing", "security"] }
+          ]
+        },
+        {
+          "id": "product_type",
+          "type": "mcq",
+          "prompt": "What are you building?",
+          "optionalFreeText": {
+            "enabled": true,
+            "label": "Optional: add context",
+            "placeholder": "e.g., Marketplace, CRM, booking, directory…"
+          },
+          "answers": [
+            { "id": "saas", "label": "SaaS web app", "intents": ["frontend", "backend"] },
+            { "id": "landing", "label": "Landing page", "intents": ["ux", "frontend"] },
+            { "id": "tool", "label": "Internal tool", "intents": ["api", "database"] },
+            { "id": "mobile", "label": "Mobile app", "intents": ["ux", "frontend", "backend"] }
+          ]
+        },
+        {
+          "id": "core_goal",
+          "type": "mcq",
+          "prompt": "Primary goal?",
+          "optionalFreeText": { "enabled": true, "label": "Optional: custom goal", "placeholder": "e.g., Reduce support tickets" },
+          "answers": [
+            { "id": "acquire", "label": "Acquire users", "intents": ["plan", "ux"] },
+            { "id": "convert", "label": "Convert leads", "intents": ["plan", "ux", "frontend"] },
+            { "id": "operate", "label": "Operate workflow", "intents": ["plan", "api", "database"] },
+            { "id": "deliver", "label": "Deliver service", "intents": ["plan", "backend", "integrations"] }
+          ]
+        },
+        {
+          "id": "auth_needed",
+          "type": "mcq",
+          "prompt": "User accounts needed?",
+          "answers": [
+            { "id": "auth_yes", "label": "Yes", "intents": ["auth", "security"] },
+            { "id": "auth_no", "label": "No", "intents": ["plan"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "design",
+      "title": "Design",
+      "description": "Pick UX direction and accessibility requirements quickly.",
+      "questions": [
+        {
+          "id": "style",
+          "type": "mcq",
+          "prompt": "Visual style?",
+          "optionalFreeText": { "enabled": true, "label": "Optional: reference link", "placeholder": "Paste a URL (Figma, site, screenshot link)" },
+          "answers": [
+            { "id": "minimal", "label": "Minimal / clean", "intents": ["ux"] },
+            { "id": "bold", "label": "Bold / branded", "intents": ["ux"] },
+            { "id": "dashboard", "label": "Dashboard / data", "intents": ["ux", "frontend"] },
+            { "id": "mobilefirst", "label": "Mobile-first", "intents": ["ux", "frontend"] }
+          ]
+        },
+        {
+          "id": "a11y",
+          "type": "mcq",
+          "prompt": "Accessibility level?",
+          "answers": [
+            { "id": "wcag_aa", "label": "WCAG AA", "intents": ["ux", "testing"] },
+            { "id": "best_effort", "label": "Best effort", "intents": ["ux"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "frontend",
+      "title": "Front-End",
+      "description": "Decide UI scope and constraints fast.",
+      "questions": [
+        {
+          "id": "screens",
+          "type": "mcq",
+          "prompt": "How many screens in MVP?",
+          "answers": [
+            { "id": "s1", "label": "1–2", "intents": ["frontend", "ux"] },
+            { "id": "s3", "label": "3–5", "intents": ["frontend", "ux"] },
+            { "id": "s6", "label": "6+", "intents": ["plan", "frontend"] }
+          ]
+        },
+        {
+          "id": "state",
+          "type": "mcq",
+          "prompt": "UI complexity?",
+          "answers": [
+            { "id": "static", "label": "Mostly static", "intents": ["frontend"] },
+            { "id": "forms", "label": "Forms + validation", "intents": ["frontend", "testing"] },
+            { "id": "realtime", "label": "Real-time updates", "intents": ["backend", "api"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "backend",
+      "title": "Back-End",
+      "description": "Pick data + API needs quickly.",
+      "questions": [
+        {
+          "id": "data",
+          "type": "mcq",
+          "prompt": "Persistent data needed?",
+          "answers": [
+            { "id": "db_yes", "label": "Yes", "intents": ["database", "api", "security"] },
+            { "id": "db_no", "label": "No", "intents": ["api"] }
+          ]
+        },
+        {
+          "id": "payments",
+          "type": "mcq",
+          "prompt": "Payments needed?",
+          "answers": [
+            { "id": "pay_yes", "label": "Yes", "intents": ["payments", "security"] },
+            { "id": "pay_no", "label": "No", "intents": ["plan"] }
+          ]
+        },
+        {
+          "id": "integrations",
+          "type": "mcq",
+          "prompt": "External integrations?",
+          "answers": [
+            { "id": "int_none", "label": "None", "intents": ["api"] },
+            { "id": "int_webhooks", "label": "Webhooks", "intents": ["integrations", "api"] },
+            { "id": "int_zapier", "label": "Zapier/Make", "intents": ["integrations"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "testing",
+      "title": "Testing",
+      "description": "Choose test depth fast.",
+      "questions": [
+        {
+          "id": "test_depth",
+          "type": "mcq",
+          "prompt": "Test depth?",
+          "answers": [
+            { "id": "smoke", "label": "Smoke tests", "intents": ["testing"] },
+            { "id": "critical", "label": "Critical-path", "intents": ["testing", "debugging"] },
+            { "id": "full", "label": "Full regression", "intents": ["testing", "quality"] }
+          ]
+        },
+        {
+          "id": "security_review",
+          "type": "mcq",
+          "prompt": "Security review?",
+          "answers": [
+            { "id": "sec_yes", "label": "Yes", "intents": ["security"] },
+            { "id": "sec_no", "label": "No", "intents": ["testing"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deployment",
+      "title": "Deployment",
+      "description": "Ship fast with predictable steps.",
+      "questions": [
+        {
+          "id": "hosting",
+          "type": "mcq",
+          "prompt": "Hosting target?",
+          "answers": [
+            { "id": "gh_pages", "label": "GitHub Pages", "intents": ["shipping"] },
+            { "id": "custom_domain", "label": "Custom domain", "intents": ["shipping", "security"] },
+            { "id": "nocode_host", "label": "No-code hosting", "intents": ["shipping"] }
+          ]
+        },
+        {
+          "id": "observability",
+          "type": "mcq",
+          "prompt": "Analytics/logging?",
+          "answers": [
+            { "id": "basic", "label": "Basic", "intents": ["shipping"] },
+            { "id": "important", "label": "Important", "intents": ["shipping", "quality"] }
+          ]
+        }
+      ]
+    }
+  ]
+}
