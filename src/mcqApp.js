@@ -78,6 +78,8 @@ export async function mountMcqApp(rootEl) {
     loadJson('./data/intent-map.json')
   ]);
 
+  const stageOrder = templates.stages.map(s => s.id);
+
   const header = el('div', { class: 'mcq-header' }, [
     el('div', { class: 'phase-tag', text: 'Rapid Requirements — MCQ Flow' }),
     el('div', { class: 'phase-title', text: 'Answer in <3 seconds per step' }),
@@ -107,16 +109,41 @@ export async function mountMcqApp(rootEl) {
     stageSelect.appendChild(el('option', { value: stage.id, text: `${stage.title}` }));
   }
 
-  const state = {
-    stageId: templates.stages[0].id,
-    answersByQuestionId: {},
-    freeTextByQuestionId: {},
-    textByQuestionId: {},
-    completedTextByQuestionId: {}
-  };
+  const stateByStageId = new Map();
+  function getStageState(stageId) {
+    const existing = stateByStageId.get(stageId);
+    if (existing) return existing;
+    const created = {
+      stageId,
+      answersByQuestionId: {},
+      freeTextByQuestionId: {},
+      textByQuestionId: {},
+      completedTextByQuestionId: {}
+    };
+    stateByStageId.set(stageId, created);
+    return created;
+  }
+
+  let state = getStageState(stageOrder[0]);
 
   const questionsWrap = el('div', { class: 'mcq-questions' });
   const outputWrap = el('div', { class: 'mcq-output' });
+
+  function setStage(stageId) {
+    if (!stageOrder.includes(stageId)) return;
+    state = getStageState(stageId);
+    stageSelect.value = stageId;
+    render();
+  }
+
+  function getGateStatus(stage) {
+    const gateText = stage.questions.find(q => q.type === 'text' && q.gatesFollowing);
+    if (!gateText) return { gateText: null, gateSatisfied: true };
+    const value = state.textByQuestionId[gateText.id] ?? '';
+    const satisfied =
+      !!state.completedTextByQuestionId[gateText.id] && (!gateText.text?.required || value.trim().length > 0);
+    return { gateText, gateSatisfied: satisfied };
+  }
 
   function render() {
     const stage = templates.stages.find(s => s.id === state.stageId);
@@ -131,13 +158,7 @@ export async function mountMcqApp(rootEl) {
       ])
     );
 
-    // Ideation requirement capture: a gated text step that must be completed before showing clarifying MCQs.
-    const gateText = stage.questions.find(q => q.type === 'text' && q.gatesFollowing);
-    const gateTextValue = gateText ? (state.textByQuestionId[gateText.id] ?? '') : '';
-    const gateSatisfied = !gateText
-      ? true
-      : !!state.completedTextByQuestionId[gateText.id] &&
-        (!gateText.text?.required || gateTextValue.trim().length > 0);
+    const { gateText, gateSatisfied } = getGateStatus(stage);
 
     for (const q of stage.questions) {
       if (!gateSatisfied && gateText && q.id !== gateText.id) continue;
@@ -225,6 +246,45 @@ export async function mountMcqApp(rootEl) {
       questionsWrap.appendChild(card);
     }
 
+    const stageIdx = stageOrder.indexOf(stage.id);
+    const prevStageId = stageIdx > 0 ? stageOrder[stageIdx - 1] : null;
+    const nextStageId = stageIdx >= 0 && stageIdx < stageOrder.length - 1 ? stageOrder[stageIdx + 1] : null;
+
+    const nav = el('div', { class: 'mcq-nav' });
+    if (prevStageId) {
+      nav.appendChild(
+        el(
+          'button',
+          {
+            type: 'button',
+            class: 'copy-all-btn',
+            onclick: () => setStage(prevStageId)
+          },
+          [el('span', { text: '← Previous stage' })]
+        )
+      );
+    }
+
+    if (nextStageId) {
+      const canAdvance = gateSatisfied;
+      nav.appendChild(
+        el(
+          'button',
+          {
+            type: 'button',
+            class: 'copy-all-btn',
+            style: canAdvance ? '' : 'opacity:0.45;cursor:not-allowed;',
+            onclick: () => {
+              if (!canAdvance) return;
+              setStage(nextStageId);
+            }
+          },
+          [el('span', { text: 'Next stage →' })]
+        )
+      );
+    }
+    questionsWrap.appendChild(nav);
+
     renderOutput();
   }
 
@@ -308,12 +368,7 @@ export async function mountMcqApp(rootEl) {
   ]);
 
   stageSelect.addEventListener('change', e => {
-    state.stageId = e.target.value;
-    state.answersByQuestionId = {};
-    state.freeTextByQuestionId = {};
-    state.textByQuestionId = {};
-    state.completedTextByQuestionId = {};
-    render();
+    setStage(e.target.value);
   });
 
   rootEl.appendChild(controls);
