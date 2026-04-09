@@ -537,6 +537,7 @@
 <nav class="tab-nav" id="tabNav">
   <button class="tab-btn active" data-tab="roles"><span class="phase-num">00</span> Roles</button>
   <button class="tab-btn" data-tab="rapid"><span class="phase-num">RR</span> Rapid</button>
+  <button class="tab-btn" data-tab="assistant"><span class="phase-num">BA</span> Assistant</button>
   <button class="tab-btn" data-tab="p1"><span class="phase-num">P1</span> Ideation</button>
   <button class="tab-btn" data-tab="p2"><span class="phase-num">P2</span> Design</button>
   <button class="tab-btn" data-tab="p3"><span class="phase-num">P3</span> Front-End</button>
@@ -1941,6 +1942,34 @@ RLS: Read/Write only where user_id = auth.uid()
   <div id="mcqApp"></div>
 </div>
 
+<div class="tab-panel" id="tab-assistant">
+  <div class="phase-header">
+    <div class="phase-tag">Build Assistant</div>
+    <div class="phase-title">Skills · Bundles · Prompt Optimizer</div>
+    <div class="phase-desc">Browse the full Antigravity skills catalog, build bundles, and generate tool-specific optimized build prompts.</div>
+  </div>
+
+  <div class="info-block">
+    <h3>Tip</h3>
+    <ul>
+      <li>Use search + phase filters to narrow from 1300+ skills.</li>
+      <li>Add skills to a bundle, then switch to Optimizer to generate an improved prompt.</li>
+    </ul>
+  </div>
+
+  <div class="example-box">
+    <div class="example-header">Embedded App</div>
+    <div class="example-content" style="padding:0;">
+      <iframe
+        title="Build Assistant"
+        src="./build-assistant.html"
+        style="width:100%;height:80vh;border:0;border-radius:10px;overflow:hidden;"
+        loading="lazy"
+      ></iframe>
+    </div>
+  </div>
+</div>
+
 </main>
 
 <script>
@@ -2106,6 +2135,557 @@ RLS: Read/Write only where user_id = auth.uid()
   injectPanelNav();
   setCopyAllState();
 </script>
-<script type="module" src="./src/app.js"></script>
+<script>
+  const DEFAULT_SKILLS_INDEX_URL =
+    'https://raw.githubusercontent.com/sickn33/antigravity-awesome-skills/main/skills_index.json';
+
+  async function loadSkillCatalog({ url = DEFAULT_SKILLS_INDEX_URL } = {}) {
+    const res = await fetch(url, { cache: 'force-cache' });
+    if (!res.ok) {
+      throw new Error(`Failed to load skills catalog: ${res.status}`);
+    }
+    const skills = await res.json();
+    if (!Array.isArray(skills)) {
+      throw new Error('Skills catalog is not an array');
+    }
+    return skills;
+  }
+
+  function tokenizeSkillCatalog(text) {
+    if (!text) return [];
+    return String(text)
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
+  }
+
+  function buildSkillIndex(skills) {
+    const idToSkill = new Map();
+    const tokenToIds = new Map();
+
+    for (const skill of skills) {
+      if (!skill || typeof skill !== 'object') continue;
+      if (!skill.id || typeof skill.id !== 'string') continue;
+
+      idToSkill.set(skill.id, skill);
+
+      const tokens = new Set([
+        ...tokenizeSkillCatalog(skill.id),
+        ...tokenizeSkillCatalog(skill.name),
+        ...tokenizeSkillCatalog(skill.category),
+        ...tokenizeSkillCatalog(skill.description),
+        ...tokenizeSkillCatalog(skill.path)
+      ]);
+
+      for (const token of tokens) {
+        const existing = tokenToIds.get(token);
+        if (existing) existing.push(skill.id);
+        else tokenToIds.set(token, [skill.id]);
+      }
+    }
+
+    return { idToSkill, tokenToIds, total: skills.length };
+  }
+
+  function searchSkills(index, queryTokens, { riskAllowlist } = {}) {
+    const tokens = Array.isArray(queryTokens) ? queryTokens : tokenizeSkillCatalog(queryTokens);
+    const scores = new Map();
+
+    for (const token of tokens) {
+      const normalized = String(token).toLowerCase();
+      if (index.idToSkill.has(normalized)) {
+        scores.set(normalized, (scores.get(normalized) ?? 0) + 1000);
+      }
+
+      const ids = index.tokenToIds.get(normalized);
+      if (!ids) continue;
+      for (const id of ids) {
+        scores.set(id, (scores.get(id) ?? 0) + 1);
+      }
+    }
+
+    const ranked = Array.from(scores.entries())
+      .map(([id, score]) => ({ id, score, skill: index.idToSkill.get(id) }))
+      .filter(x => x.skill)
+      .filter(x => {
+        if (!riskAllowlist || riskAllowlist.length === 0) return true;
+        return riskAllowlist.includes(x.skill.risk);
+      })
+      .sort((a, b) => b.score - a.score || a.id.localeCompare(b.id));
+
+    return ranked;
+  }
+
+  function skillInvocation(id, { host = 'antigravity' } = {}) {
+    const mention = `@${id}`;
+    if (host === 'cursor') return mention;
+    if (host === 'claude-code') return `>> /${id}`;
+    if (host === 'codex') return mention;
+    if (host === 'gemini') return id;
+    return mention;
+  }
+
+  function unique(items) {
+    const out = [];
+    const seen = new Set();
+    for (const item of items) {
+      if (!item) continue;
+      if (seen.has(item)) continue;
+      seen.add(item);
+      out.push(item);
+    }
+    return out;
+  }
+
+  function byPriorityDesc(a, b) {
+    return (b.priority ?? 0) - (a.priority ?? 0) || String(a.id).localeCompare(String(b.id));
+  }
+
+  function selectAgents({ stageId, selectedIntentIds, skillIndex, intentMap, overrides, contextTokens }) {
+    const defaults = intentMap?.defaults ?? {};
+    const riskAllowlist = overrides?.riskAllowlist ?? defaults.riskAllowlist ?? ['safe', 'none'];
+    const maxSkills = overrides?.maxSkills ?? defaults.maxSkills ?? 8;
+    const perIntentMaxSkills = overrides?.perIntentMaxSkills ?? defaults.perIntentMaxSkills ?? 2;
+    const extraTokens = Array.isArray(contextTokens) ? contextTokens.slice(0, 12) : [];
+
+    const intents = (intentMap?.intents ?? [])
+      .filter(i => selectedIntentIds.includes(i.id))
+      .sort(byPriorityDesc);
+
+    const selected = [];
+    const reasons = [];
+
+    for (const intent of intents) {
+      const pickedForIntent = [];
+
+      for (const id of intent.preferredSkillIds ?? []) {
+        if (skillIndex.idToSkill.has(id)) pickedForIntent.push(id);
+      }
+
+      if (pickedForIntent.length < perIntentMaxSkills) {
+        const ranked = searchSkills(skillIndex, [...(intent.fallbackQueryTokens ?? []), ...extraTokens], {
+          riskAllowlist
+        });
+        for (const r of ranked) {
+          if (pickedForIntent.length >= perIntentMaxSkills) break;
+          if (!pickedForIntent.includes(r.id)) pickedForIntent.push(r.id);
+        }
+      }
+
+      const finalForIntent = pickedForIntent.slice(0, perIntentMaxSkills);
+      for (const id of finalForIntent) {
+        selected.push(id);
+        reasons.push({ stageId, intentId: intent.id, skillId: id });
+      }
+
+      if (selected.length >= maxSkills) break;
+    }
+
+    const uniqueSelected = unique(selected).slice(0, maxSkills);
+    return {
+      stageId,
+      skills: uniqueSelected.map(id => skillIndex.idToSkill.get(id)),
+      skillIds: uniqueSelected,
+      reasons
+    };
+  }
+
+  function el(tag, attrs = {}, children = []) {
+    const node = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === 'class') node.className = v;
+      else if (k === 'text') node.textContent = v;
+      else if (k.startsWith('on') && typeof v === 'function') node.addEventListener(k.slice(2), v);
+      else if (v === false || v === null || v === undefined) continue;
+      else node.setAttribute(k, String(v));
+    }
+    for (const child of children) node.appendChild(child);
+    return node;
+  }
+
+  async function loadJson(path) {
+    const res = await fetch(path, { cache: 'no-cache' });
+    if (!res.ok) throw new Error(`Failed to load ${path}: ${res.status}`);
+    return res.json();
+  }
+
+  function collectIntentsFromAnswers(stage, answersByQuestionId) {
+    const intents = [];
+    for (const q of stage.questions) {
+      if (q.type !== 'mcq') continue;
+      const answerId = answersByQuestionId[q.id];
+      if (!answerId) continue;
+      const a = q.answers.find(x => x.id === answerId);
+      if (!a) continue;
+      for (const intent of a.intents) intents.push(intent);
+    }
+    return Array.from(new Set(intents));
+  }
+
+  function tokenizeMcq(text) {
+    return String(text ?? '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 12);
+  }
+
+  function formatSkillList(skills) {
+    return skills
+      .map(s => `- ${s.id}${s.description ? ` — ${String(s.description).slice(0, 120)}` : ''}`)
+      .join('\n');
+  }
+
+  function buildInvocationBlock(skillIds) {
+    const hosts = [
+      { id: 'antigravity', label: 'Antigravity', hint: 'Use @skill in Antigravity' },
+      { id: 'cursor', label: 'Cursor', hint: 'Use @skill in Cursor chat' },
+      { id: 'claude-code', label: 'Claude Code', hint: 'Use >> /skill in Claude Code' },
+      { id: 'codex', label: 'Codex', hint: 'Use @skill in Codex' },
+      { id: 'gemini', label: 'Gemini CLI', hint: 'Use the skill name as instruction' }
+    ];
+
+    const container = el('div', { class: 'mcq-invocations' });
+    for (const host of hosts) {
+      const lines = skillIds.map(id => skillInvocation(id, { host: host.id })).join('\n');
+      container.appendChild(
+        el('div', { class: 'mcq-invocation' }, [
+          el('div', { class: 'mcq-invocation-title', text: host.label }),
+          el('div', { class: 'mcq-invocation-hint', text: host.hint }),
+          el('pre', { class: 'mcq-pre', text: lines })
+        ])
+      );
+    }
+    return container;
+  }
+
+  async function mountMcqApp(rootEl) {
+    const [templates, intentMap] = await Promise.all([
+      loadJson('./data/mcq.templates.json'),
+      loadJson('./data/intent-map.json')
+    ]);
+
+    const stageOrder = templates.stages.map(s => s.id);
+
+    const header = el('div', { class: 'mcq-header' }, [
+      el('div', { class: 'phase-tag', text: 'Rapid Requirements — MCQ Flow' }),
+      el('div', { class: 'phase-title', text: 'Answer in <3 seconds per step' }),
+      el('div', {
+        class: 'phase-desc',
+        text:
+          'Fast multiple-choice questions for ideation, design, front-end, back-end, testing, and deployment. Free-text remains optional.'
+      })
+    ]);
+
+    const loading = el('div', { class: 'mcq-loading', text: 'Loading skills catalog…' });
+    rootEl.appendChild(header);
+    rootEl.appendChild(loading);
+
+    let skills;
+    try {
+      skills = await loadSkillCatalog({ url: './data/skills_index.json' });
+    } catch (e) {
+      skills = await loadSkillCatalog();
+    }
+    const skillIndex = buildSkillIndex(skills);
+
+    loading.textContent = `Loaded ${skillIndex.total} Antigravity skills.`;
+
+    const stageSelect = el('select', { class: 'mcq-select' });
+    for (const stage of templates.stages) {
+      stageSelect.appendChild(el('option', { value: stage.id, text: `${stage.title}` }));
+    }
+
+    const stateByStageId = new Map();
+    function getStageState(stageId) {
+      const existing = stateByStageId.get(stageId);
+      if (existing) return existing;
+      const created = {
+        stageId,
+        answersByQuestionId: {},
+        freeTextByQuestionId: {},
+        textByQuestionId: {},
+        completedTextByQuestionId: {}
+      };
+      stateByStageId.set(stageId, created);
+      return created;
+    }
+
+    let state = getStageState(stageOrder[0]);
+
+    const questionsWrap = el('div', { class: 'mcq-questions' });
+    const outputWrap = el('div', { class: 'mcq-output' });
+
+    function setStage(stageId) {
+      if (!stageOrder.includes(stageId)) return;
+      state = getStageState(stageId);
+      stageSelect.value = stageId;
+      render();
+    }
+
+    function getGateStatus(stage) {
+      const gateText = stage.questions.find(q => q.type === 'text' && q.gatesFollowing);
+      if (!gateText) return { gateText: null, gateSatisfied: true };
+      const value = state.textByQuestionId[gateText.id] ?? '';
+      const satisfied =
+        !!state.completedTextByQuestionId[gateText.id] && (!gateText.text?.required || value.trim().length > 0);
+      return { gateText, gateSatisfied: satisfied };
+    }
+
+    function render() {
+      const stage = templates.stages.find(s => s.id === state.stageId);
+      if (!stage) return;
+
+      questionsWrap.replaceChildren();
+
+      questionsWrap.appendChild(
+        el('div', { class: 'info-block' }, [
+          el('h3', { text: stage.title }),
+          el('div', { class: 'meta-value', text: stage.description ?? '' })
+        ])
+      );
+
+      const { gateText, gateSatisfied } = getGateStatus(stage);
+
+      for (const q of stage.questions) {
+        if (!gateSatisfied && gateText && q.id !== gateText.id) continue;
+
+        const answerId = state.answersByQuestionId[q.id] ?? '';
+        const card = el('div', { class: 'mcq-card' });
+        card.appendChild(el('div', { class: 'mcq-q', text: q.prompt }));
+        if (q.help) card.appendChild(el('div', { class: 'mcq-help', text: q.help }));
+
+        if (q.type === 'text') {
+          const value = state.textByQuestionId[q.id] ?? '';
+          const input = el('input', {
+            class: 'mcq-free',
+            type: 'text',
+            value,
+            maxlength: q.text?.maxLength ?? 160,
+            placeholder: q.text?.placeholder ?? '',
+            oninput: e => {
+              state.textByQuestionId[q.id] = e.target.value;
+              renderOutput();
+            }
+          });
+
+          card.appendChild(el('div', { class: 'mcq-free-label', text: q.text?.label ?? 'Required' }));
+          card.appendChild(input);
+
+          if (q.gatesFollowing) {
+            const canContinue = !q.text?.required || String(value).trim().length > 0;
+            card.appendChild(
+              el(
+                'button',
+                {
+                  type: 'button',
+                  class: `copy-all-btn${canContinue ? '' : ''}`,
+                  style: canContinue ? '' : 'opacity:0.45;cursor:not-allowed;',
+                  onclick: () => {
+                    if (!canContinue) return;
+                    state.completedTextByQuestionId[q.id] = true;
+                    renderOutput();
+                    render();
+                  }
+                },
+                [el('span', { text: 'Continue' })]
+              )
+            );
+          }
+        } else {
+          const optionsRow = el('div', { class: 'mcq-options' });
+          for (const a of q.answers) {
+            const isActive = a.id === answerId;
+            optionsRow.appendChild(
+              el(
+                'button',
+                {
+                  type: 'button',
+                  class: `mcq-option${isActive ? ' active' : ''}`,
+                  onclick: () => {
+                    state.answersByQuestionId[q.id] = a.id;
+                    renderOutput();
+                    render();
+                  }
+                },
+                [el('span', { text: a.label })]
+              )
+            );
+          }
+          card.appendChild(optionsRow);
+
+          if (q.optionalFreeText?.enabled) {
+            const input = el('input', {
+              class: 'mcq-free',
+              type: 'text',
+              value: state.freeTextByQuestionId[q.id] ?? '',
+              placeholder: q.optionalFreeText.placeholder ?? '',
+              oninput: e => {
+                state.freeTextByQuestionId[q.id] = e.target.value;
+                renderOutput();
+              }
+            });
+            card.appendChild(el('div', { class: 'mcq-free-label', text: q.optionalFreeText.label }));
+            card.appendChild(input);
+          }
+        }
+
+        questionsWrap.appendChild(card);
+      }
+
+      const stageIdx = stageOrder.indexOf(stage.id);
+      const prevStageId = stageIdx > 0 ? stageOrder[stageIdx - 1] : null;
+      const nextStageId = stageIdx >= 0 && stageIdx < stageOrder.length - 1 ? stageOrder[stageIdx + 1] : null;
+
+      const nav = el('div', { class: 'mcq-nav' });
+      if (prevStageId) {
+        nav.appendChild(
+          el(
+            'button',
+            {
+              type: 'button',
+              class: 'copy-all-btn',
+              onclick: () => setStage(prevStageId)
+            },
+            [el('span', { text: '← Previous stage' })]
+          )
+        );
+      }
+
+      if (nextStageId) {
+        const canAdvance = gateSatisfied;
+        nav.appendChild(
+          el(
+            'button',
+            {
+              type: 'button',
+              class: 'copy-all-btn',
+              style: canAdvance ? '' : 'opacity:0.45;cursor:not-allowed;',
+              onclick: () => {
+                if (!canAdvance) return;
+                setStage(nextStageId);
+              }
+            },
+            [el('span', { text: 'Next stage →' })]
+          )
+        );
+      }
+      questionsWrap.appendChild(nav);
+
+      renderOutput();
+    }
+
+    function renderOutput() {
+      const stage = templates.stages.find(s => s.id === state.stageId);
+      if (!stage) return;
+
+      const baseIdeationIntents =
+        stage.id === 'ideation' && (state.textByQuestionId.initial_description ?? '').trim().length > 0
+          ? ['plan', 'product-brief']
+          : [];
+
+      const intentIds = Array.from(
+        new Set([...baseIdeationIntents, ...collectIntentsFromAnswers(stage, state.answersByQuestionId)])
+      );
+
+      const contextTokens = tokenizeMcq(state.textByQuestionId.initial_description ?? '');
+      const selection = selectAgents({
+        stageId: stage.id,
+        selectedIntentIds: intentIds,
+        skillIndex,
+        intentMap,
+        contextTokens
+      });
+
+      const freeText = Object.entries(state.freeTextByQuestionId)
+        .map(([k, v]) => (v ? `${k}: ${v}` : null))
+        .filter(Boolean)
+        .join(' | ');
+
+      outputWrap.replaceChildren();
+      outputWrap.appendChild(
+        el('div', { class: 'info-block' }, [
+          el('h3', { text: 'Recommended Minimal Agent Set' }),
+          el('div', {
+            class: 'meta-value',
+            text: selection.skillIds.length
+              ? 'Use these skills first (minimal set for the selected answers).'
+              : 'Select answers to get agent recommendations.'
+          })
+        ])
+      );
+
+      if (selection.skillIds.length) {
+        outputWrap.appendChild(el('pre', { class: 'mcq-pre', text: formatSkillList(selection.skills) }));
+        outputWrap.appendChild(buildInvocationBlock(selection.skillIds));
+      }
+
+      outputWrap.appendChild(
+        el('div', { class: 'info-block' }, [
+          el('h3', { text: 'No-code Tool Handoff (Anti-Gravity Optimised)' }),
+          el('div', {
+            class: 'meta-value',
+            text:
+              'Paste the invocations into your tool chat, then paste the generated deliverables (brief/spec/checklist) back into your builder (Lovable, Bolt, Bubble, Webflow, etc.).'
+          }),
+          el('pre', {
+            class: 'mcq-pre',
+            text: JSON.stringify(
+              {
+                stage: stage.id,
+                initialDescription: (state.textByQuestionId.initial_description ?? '').trim() || null,
+                answers: state.answersByQuestionId,
+                optionalNotes: freeText || null,
+                intentIds,
+                recommendedSkillIds: selection.skillIds
+              },
+              null,
+              2
+            )
+          })
+        ])
+      );
+    }
+
+    const controls = el('div', { class: 'mcq-controls' }, [
+      el('div', { class: 'meta-label', text: 'Stage' }),
+      stageSelect
+    ]);
+
+    stageSelect.addEventListener('change', e => {
+      setStage(e.target.value);
+    });
+
+    rootEl.appendChild(controls);
+    rootEl.appendChild(el('hr', { class: 'section-divider' }));
+    rootEl.appendChild(questionsWrap);
+    rootEl.appendChild(el('hr', { class: 'section-divider' }));
+    rootEl.appendChild(outputWrap);
+
+    render();
+  }
+
+  function safeMount() {
+    const root = document.getElementById('mcqApp');
+    if (!root) return;
+    mountMcqApp(root).catch(err => {
+      root.innerHTML = '';
+      const pre = document.createElement('pre');
+      pre.style.whiteSpace = 'pre-wrap';
+      pre.textContent = `Failed to load MCQ flow.\n\n${err?.message ?? err}`;
+      root.appendChild(pre);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', safeMount);
+  } else {
+    safeMount();
+  }
+</script>
 </body>
 </html>
