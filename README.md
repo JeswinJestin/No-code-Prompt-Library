@@ -1,104 +1,164 @@
-# No-Code Prompt Library
+<img width="1800" height="948" alt="Image" src="https://github.com/user-attachments/assets/98d55d5b-d1f9-4081-864f-eba872541e56" />
 
-A fast, single-page prompt library for building no-code products with AI. Includes role prompts (PM, UX, Engineer, QA, Security) and phase-by-phase build prompts (ideation → design → build → backend → testing → deploy). Built as a lightweight HTML app with one-click copy.
+<div align="center">
 
-## GitHub Description (paste into “About”)
+<br/>
 
-No-code AI prompt library for building products end-to-end (roles + phased prompts). Single-page HTML app with one-click copy. Deploy on GitHub Pages.
+```
+  ┌──────────────────────────────────────────────┐
+  │     NO-CODE PROMPT LIBRARY + BUILD ASSISTANT │
+  └──────────────────────────────────────────────┘
+```
 
-## Suggested Topics (tags)
+**A fast, phased prompt system for building full-stack products with no-code AI tools.**  
+Roles · Phase Prompts · Skills Bundle · Prompt Optimizer · AI Recommender
 
-Add these under **Repository → About → Topics**:
+[![GitHub Pages](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-1a1916?style=flat-square&logo=github)](https://jeswinjestin.github.io/No-code-Prompt-Library/nocode-prompt-library.html)
+[![Skills Catalog](https://img.shields.io/badge/Antigravity%20Skills-1%2C381%2B-059669?style=flat-square)](https://sickn33.github.io/antigravity-awesome-skills/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-f0efe9?style=flat-square)](LICENSE)
+[![Static Site](https://img.shields.io/badge/Static-Zero%20Backend-9333ea?style=flat-square)]()
 
-- no-code
-- prompt-library
-- ai-prompts
-- chatgpt-prompts
-- product-management
-- ux-design
-- ui-design
-- qa-testing
-- security
-- github-pages
-- html
-- vanilla-javascript
-- single-page-app
-- static-site
+<br/>
 
-## Project Structure
+</div>
 
-- `index.html` — Entry point for GitHub Pages (redirects to the app file)
-- `nocode-prompt-library.html` — The app (HTML + CSS + JS in one file)
+---
+
+## What this is
+
+A single-page toolkit that takes you from raw product idea to a shippable, tested, deployed no-code app — without writing code. It combines a structured prompt library (PM → Design → Build → Backend → Testing → Deploy), a live Antigravity skills explorer, a bundle builder, and an AI-powered prompt optimizer — all in static HTML files you can host on GitHub Pages for free.
+
+---
+
+## Three files, one system
+
+| File | Purpose |
+|------|---------|
+| `nocode-prompt-library.html` | Phased prompt library — 24 copy-paste prompts across 6 build phases |
+| `build-assistant.html` | Skills browser + bundle builder + AI prompt optimizer |
+| `index.html` | GitHub Pages entry point (redirect) |
+
+---
 
 ## Features
 
-- Role-based system prompts: PM, UX/UI, No-Code Engineer, QA, Security/Compliance
-- Phase tabs: Roles + P1–P6 prompts + an MVP example
-- One-click “Copy” per prompt + “Copy all in this tab”
-- Rapid Requirements tab: MCQ flow for ideation → design → front-end → back-end → testing → deployment
-- Instant agent recommendations powered by the Antigravity Awesome Skills catalog (using a local snapshot with upstream fallback)
-- Works as a static site (ideal for GitHub Pages)
-- Responsive layout (mobile → desktop)
+**Prompt Library**
+- Role prompts for 5 agents: PM, UX/UI Designer, No-Code Engineer, QA, Security
+- 6 build phases with 3–4 prompts each and an approval gate between every phase
+- One-click copy per prompt
+- MVP walkthrough example (TaskFlow task tracker)
 
-## Rapid Requirements (MCQ Flow)
+**Build Assistant**
+- Browse 1,381+ Antigravity skills filtered by build phase and category
+- AI recommender — describe your task, get 5 `@skillname` suggestions powered by Claude
+- Bundle builder — add skills to a persistent tray, copy the full collection in one shot
+- Prompt Optimizer — paste any raw prompt, pick your tool, load your bundle → Claude rewrites it with tool-specific instructions, skill guidance woven in, and an acceptance criteria checklist
 
-- Open the **Rapid** tab
-- First, complete the **Ideation → initial description** step (captures the original requirements)
-- Then answer short MCQs that clarify scope (single-click; optional free-text remains available where relevant)
-- Answer each question with a single click (free-text is clearly marked as optional)
-- The app recommends a minimal set of Antigravity skills for the implied technical work and outputs ready-to-paste invocations for common hosts
+**Prompt Optimizer — supported tools**
 
-### Template Files (Deliverable #1)
+| Tool | Stack |
+|------|-------|
+| Lovable | React + Vite + Tailwind |
+| Bolt.new | Vite + React + TypeScript |
+| v0 | shadcn/ui + Next.js App Router |
+| Webflow | No-code CMS |
+| Bubble | Visual logic |
+| FlutterFlow | Flutter / Dart |
 
-- `data/mcq.schema.json` — JSON Schema for MCQ templates
-- `data/mcq.templates.json` — MCQ templates for each life-cycle stage
-- `data/intent-map.json` — Intent → skill mapping configuration
+---
 
-## Run Locally
+## Build phases
 
-The clipboard feature works best from a local web server (not `file://`).
+```
+P1 · Ideation      →  Problem statement · MVP scope · North Star metric
+P2 · Design        →  Style brief · Design system · Screen-by-screen specs
+P3 · Frontend      →  Tool selection · Per-screen build prompts · Responsive audit
+P4 · Backend       →  Data model · Auth & permissions · Automations & APIs
+P5 · Testing       →  Test plan · Security audit · Bug fix loop
+P6 · Deploy        →  Pre-launch checklist · Landing page · Monitoring setup
+```
 
-### Option A: Python
+Each phase has an **approval gate** — a checklist you must pass before the next phase unlocks. This is what keeps a 2-hour build from becoming a 2-week mess.
 
+---
+
+## Workflow
+
+```
+1.  Open Prompt Library  →  pick your current phase
+2.  Load phase template  →  fill in [PLACEHOLDERS]
+3.  Open Build Assistant →  browse skills, add to bundle
+4.  Prompt Optimizer     →  paste prompt + pick tool + bundle loaded
+5.  Hit Optimize (⌘↵)   →  copy the output
+6.  Paste into Lovable / Bolt / Webflow / Bubble
+```
+
+---
+
+## Run locally
+
+The clipboard API requires `http://` or `https://` — not `file://`.
+
+**Python (quickest)**
 ```bash
 python -m http.server 8000
+# open http://localhost:8000
 ```
 
-Open:
+**VS Code**  
+Open `index.html` → right-click → `Open with Live Server`
 
-http://localhost:8000/
+---
 
-### Option B: VS Code Live Server
+## Deploy to GitHub Pages
 
-Open `index.html` and use “Live Server”.
+```
+1.  Push repo to GitHub
+2.  Settings → Pages
+3.  Source: main branch, / (root) folder
+4.  Save → open the Pages URL
+```
 
-## Usage
+The site is fully static — no build step, no dependencies, no server.
 
-- Open the site, pick a phase, and click **Copy** (or **Copy all in this tab**).
-- Replace placeholders like `[PROJECT_NAME]` and `[PASTE …]` before using prompts in your no-code AI tool (Lovable, Bolt.new, Bubble, Webflow, v0, etc.).
+---
 
-## Agent Selection (Deliverable #2)
+## Sync the skills catalog
 
-The selection engine:
+The Build Assistant loads a curated local skill set and can sync live from the upstream Antigravity repo. Hit **⟳ Sync GitHub** in the header to pull the latest 1,381+ skills into the browser session.
 
-- Loads a local snapshot of the Antigravity skills index (`data/skills_index.json`) and falls back to upstream when needed
-- Builds an in-memory token index (id/name/category/description)
-- Translates MCQ answers → intents → minimal recommended skills
-
-Core logic:
-
-- [skillCatalog.js](file:///c:/Users/jeswi/OneDrive/Desktop/Projects/No-code%20Prompt%20Library/src/skillCatalog.js)
-- [agentSelector.js](file:///c:/Users/jeswi/OneDrive/Desktop/Projects/No-code%20Prompt%20Library/src/agentSelector.js)
-
-### Update the Skills Catalog Snapshot
-
-To refresh `data/skills_index.json` from upstream:
+To refresh the local snapshot file:
 
 ```bash
-node -e "import('node:fs/promises').then(async fs=>{const url='https://raw.githubusercontent.com/sickn33/antigravity-awesome-skills/main/skills_index.json';const res=await fetch(url);const text=await res.text();await fs.writeFile('data/skills_index.json',text,'utf8');console.log('updated',text.length);})"
+node -e "
+import('node:fs/promises').then(async fs => {
+  const url = 'https://raw.githubusercontent.com/sickn33/antigravity-awesome-skills/main/CATALOG.md';
+  const res  = await fetch(url);
+  const text = await res.text();
+  await fs.writeFile('data/catalog.md', text, 'utf8');
+  console.log('Updated —', text.length, 'bytes');
+});
+"
 ```
 
-## Tests (Deliverable #3)
+---
+
+## Extend without code changes
+
+**Add a new intent or skill recommendation**
+→ Edit `data/intent-map.json` — add an intent with `preferredSkillIds` and/or `fallbackQueryTokens`
+
+**Change which MCQ answers trigger which skills**
+→ Edit `data/mcq.templates.json` — update `intents` under any answer option
+
+**Change tool-specific optimizer instructions**
+→ Edit the `TOOLS` object in `build-assistant.html` — each tool has its own `instructions` string
+
+No JavaScript changes required for intent or skill mapping updates.
+
+---
+
+## Tests
 
 Requires Node.js 18+.
 
@@ -106,40 +166,54 @@ Requires Node.js 18+.
 npm test
 ```
 
-The tests validate:
+Validates:
+- Catalog loads ≥ 1,300 skills
+- Index covers ≥ 95% of catalog entries
+- Exact-id search retrieves ≥ 95% of skills
+- Selection latency < 200ms for 100 warm-index queries
 
-- Catalog loads (>= 1300 skills)
-- Indexing covers >= 95% of the catalog
-- Search can retrieve >= 95% of skills by exact id
-- Selection latency stays under 200ms for 100 selections (warm index)
+---
 
-## Extend Agents Without Code Changes (Deliverable #4)
+## Project structure
 
-To modify recommendations:
+```
+/
+├── index.html                      # GitHub Pages entry point
+├── nocode-prompt-library.html      # Phased prompt library (24 prompts, 6 phases)
+├── build-assistant.html            # Skills browser + bundle + optimizer
+├── data/
+│   ├── mcq.schema.json             # JSON Schema for MCQ templates
+│   ├── mcq.templates.json          # MCQ templates per lifecycle stage
+│   ├── intent-map.json             # Intent → skill mapping
+│   └── skills_index.json           # Local Antigravity catalog snapshot
+└── src/
+    ├── skillCatalog.js             # Catalog loader + token indexer
+    └── agentSelector.js            # MCQ → intent → skill selection engine
+```
 
-- Edit `data/intent-map.json`
-  - Add a new intent with `preferredSkillIds` and/or `fallbackQueryTokens`
-  - Update priorities to control which intents “win” when capped by `maxSkills`
-- Update `data/mcq.templates.json`
-  - For any answer, add/remove intent ids under `intents`
+---
 
-No JavaScript changes are required for adding new intents or changing which skills are recommended.
+## Repository topics
 
-## Deploy to GitHub Pages
+```
+no-code  prompt-library  ai-prompts  product-management  ux-design
+ui-design  qa-testing  security  github-pages  html  vanilla-javascript
+single-page-app  static-site  antigravity  lovable  bubble  webflow
+```
 
-1. Push this folder to a GitHub repository.
-2. In GitHub: **Settings → Pages**
-3. Set **Source** to:
-   - Branch: `main`
-   - Folder: `/ (root)`
-4. Save, then open the Pages URL GitHub provides.
+---
 
 ## Notes
 
-- Copy buttons use `navigator.clipboard` when available and fall back to a legacy copy method when needed.
-- Google Fonts are loaded from `fonts.googleapis.com`.
+- Copy buttons use `navigator.clipboard` with a legacy fallback for older browsers
+- Google Fonts load from `fonts.googleapis.com` — the app still works offline but will use system fonts
+- The AI Recommender and Prompt Optimizer require a live Anthropic API connection (handled client-side via the Claude.ai artifact API; no key needed when running inside Claude)
+- If GitHub Pages shows a 404, confirm Pages is set to `main` branch and `/ (root)` and that `index.html` exists at the repo root
 
-## Troubleshooting
+---
 
-- If copy doesn’t work, make sure you are using `http://` (local server) or `https://` (GitHub Pages), not a `file://` URL.
-- If GitHub Pages shows a 404, confirm Pages is set to `main` and `/ (root)` and that `index.html` exists at the repository root.
+<div align="center">
+
+Built by [Jeswin Thomas Jestin](https://github.com/JeswinJestin) · Skills catalog by [sickn33/antigravity-awesome-skills](https://github.com/sickn33/antigravity-awesome-skills)
+
+</div>
