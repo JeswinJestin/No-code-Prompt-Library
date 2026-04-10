@@ -1,23 +1,64 @@
+<div align="center">
+
 # No-Code Prompt Library
 
-Production-ready, offline-first prompt library for building no-code MVPs with AI. A single self-contained HTML app with stage-based templates, a rapid MCQ requirements flow, skills/bundles, and export/share.
+**Offline-first, production-ready prompt system for building no-code MVPs with AI.**  
+Stages + Rapid MCQs + Skill bundles + Optimizer + Export/Share — all in a single HTML app.
 
-Live: https://jeswinjestin.github.io/No-code-Prompt-Library/
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-black?style=for-the-badge&logo=github)](https://jeswinjestin.github.io/No-code-Prompt-Library/)
+[![Single File](https://img.shields.io/badge/Single%20File-HTML%20App-111111?style=for-the-badge&logo=html5)](./nocode-prompt-library.html)
+[![Offline First](https://img.shields.io/badge/Offline-First-111111?style=for-the-badge&logo=googlechrome)](#offline-first)
+[![Tests](https://img.shields.io/badge/Tests-Node%2018%2B-111111?style=for-the-badge&logo=nodedotjs)](#tests)
 
-## What You Get
+</div>
 
-- **Stages:** Ideation → Prototyping → MVP Build → Deployment (plus Roles and examples)
-- **Rapid Requirements:** <3-second MCQs per step to clarify scope and reduce ambiguity
-- **Assistant Tools:** Structured templates, skills catalog (offline upload), bundles, optimizer, export pack
-- **Copy-first UX:** Copy per prompt + copy bundles using standardized `/skill` syntax
-- **Offline-first:** No external dependencies required to run the app
+---
 
-## App Entry Points
+Build stable, repeatable no-code MVPs by using **structured prompts**, **validation rules**, and **minimal `/skill` bundles** optimized for Trae, Cursor, and Google Antigravity-style workflows.
+
+## ✨ Features
+
+- **🧭 Systematic stages** — Ideation → Prototyping → MVP Building → Deployment (+ Roles + examples)
+- **⚡ Rapid Requirements** — <3-second MCQs that reduce scope drift and ambiguity
+- **🧩 Assistant toolkit (inside the app)**  
+  - Stage templates with parameters + preview  
+  - Skills catalog (offline upload) + bundles  
+  - Prompt optimizer for Trae/Cursor/Antigravity  
+  - Export pack (JSON/Markdown) + import
+- **📋 Copy-first UX** — copy per prompt, copy bundles, copy export items
+- **🛡️ Error prevention** — built-in validation blocks, checklists, acceptance criteria scaffolds
+- **📦 Offline-first** — no external dependencies required to run the main app
+
+## 🚀 Live Demo
+
+- https://jeswinjestin.github.io/No-code-Prompt-Library/
+
+## 🧱 App Entry Points
 
 - `index.html` — GitHub Pages entry point
-- `nocode-prompt-library.html` — Main app (self-contained)
+- `nocode-prompt-library.html` — Main app (self-contained, offline-first)
 
-## Run Locally
+## 🧠 Skill Invocation Syntax
+
+- Standard: `/skill`
+- Backward compatibility: search inputs accept `@skill` and normalize to `/skill`.
+
+## 🏁 Quick Start (Fast Path)
+
+1. Open **Rapid**
+2. Enter the 1-sentence idea → answer MCQs → copy the recommended prompt + `/skills`
+3. Open **Assistant**
+   - Choose a template → fill parameters → copy or **Add to Export Pack**
+   - Upload `skills_index.json` (optional) to browse 1300+ skills offline
+   - Build a **bundle** → generate an optimized prompt for your tool
+   - Export as **JSON/Markdown** to share or reuse later
+
+## 📦 Offline-First
+
+- The main app is designed to work without network access.
+- To browse the full skills catalog offline, upload a local `skills_index.json` from Antigravity Awesome Skills (optional).
+
+## 🛠️ Local Setup
 
 Clipboard works best from `http://` (not `file://`).
 
@@ -25,25 +66,11 @@ Clipboard works best from `http://` (not `file://`).
 python -m http.server 8000
 ```
 
-Open http://localhost:8000/
+Open: http://localhost:8000/
 
-## How To Use (Fast Path)
+## 📤 Export / Share
 
-- Open **Rapid** → enter the 1-sentence idea → answer MCQs → copy the recommended prompt + `/skills`.
-- Open **Assistant**:
-  - Pick a **template**, fill parameters, and copy/add to export pack.
-  - Upload `skills_index.json` (optional) to browse 1300+ skills offline.
-  - Build a **bundle**, then generate an optimized prompt for Trae/Cursor/Antigravity.
-  - Export as **JSON/Markdown** to share or reuse later.
-
-## Skill Invocation Syntax
-
-- Standard: `/skill`
-- Backward-compatible input: the UI accepts `@skill` in search fields and normalizes it to `/skill`.
-
-## Export / Share
-
-The app can export:
+Exports include:
 
 - Current **bundle**
 - Saved **prompt pack** (templates + optimized prompts)
@@ -53,7 +80,7 @@ Formats:
 - JSON (re-importable)
 - Markdown (easy to share)
 
-## Tests
+## ✅ Tests
 
 Requires Node.js 18+.
 
@@ -61,7 +88,7 @@ Requires Node.js 18+.
 npm test
 ```
 
-## Deploy (GitHub Pages)
+## 🌍 Deploy (GitHub Pages)
 
 GitHub → **Settings → Pages**
 
@@ -69,6 +96,6 @@ GitHub → **Settings → Pages**
 - Branch: `main`
 - Folder: `/ (root)`
 
-## Suggested GitHub Topics
+## 🧷 Suggested GitHub Topics
 
-no-code, prompt-library, ai-prompts, github-pages, html, vanilla-javascript, static-site, product-management, ux-design, qa-testing, security
+`no-code` `prompt-library` `ai-prompts` `github-pages` `html` `vanilla-javascript` `static-site` `product-management` `ux-design` `qa-testing` `security`
