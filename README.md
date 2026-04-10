@@ -140,6 +140,18 @@ No JavaScript changes are required for adding new intents or changing which skil
 - Google Fonts are loaded from `fonts.googleapis.com`.
 - Skill invocation syntax is standardized as `/skill` (the UI accepts older `@skill` input in search where applicable).
 
+## Button Reference
+
+- Tabs (Roles/Rapid/Assistant/P1–P6/EX): switch between sections without reload.
+- Copy (per prompt): copies the prompt text.
+- Copy all in this tab: copies all prompts in the currently active tab.
+- Rapid → Continue: unlocks the ideation clarifying MCQs after the required 1-sentence description is filled.
+- Rapid → Previous stage / Next stage: moves through the MCQ life-cycle stages while preserving answers per stage.
+- Assistant → Build Assistant back button: returns from the embedded assistant to the prompt library (works in iframe via `target=_top`).
+- Build Assistant → Copy (per skill): copies `/skill`.
+- Build Assistant → + Bundle / ✓ In Bundle: adds/removes a skill from the bundle.
+- Build Assistant → Copy Bundle: copies all bundled skills as `/skill /skill …`.
+
 ## Troubleshooting
 
 - If copy doesn’t work, make sure you are using `http://` (local server) or `https://` (GitHub Pages), not a `file://` URL.
