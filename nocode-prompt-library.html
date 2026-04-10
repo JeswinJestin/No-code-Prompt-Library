@@ -2219,12 +2219,9 @@ RLS: Read/Write only where user_id = auth.uid()
   }
 
   function skillInvocation(id, { host = 'antigravity' } = {}) {
-    const mention = `@${id}`;
-    if (host === 'cursor') return mention;
-    if (host === 'claude-code') return `>> /${id}`;
-    if (host === 'codex') return mention;
-    if (host === 'gemini') return id;
-    return mention;
+    const normalized = String(id ?? '').trim().replace(/^[@/]+/, '');
+    if (!normalized) return '';
+    return `/${normalized}`;
   }
 
   function unique(items) {
@@ -2342,11 +2339,11 @@ RLS: Read/Write only where user_id = auth.uid()
 
   function buildInvocationBlock(skillIds) {
     const hosts = [
-      { id: 'antigravity', label: 'Antigravity', hint: 'Use @skill in Antigravity' },
-      { id: 'cursor', label: 'Cursor', hint: 'Use @skill in Cursor chat' },
-      { id: 'claude-code', label: 'Claude Code', hint: 'Use >> /skill in Claude Code' },
-      { id: 'codex', label: 'Codex', hint: 'Use @skill in Codex' },
-      { id: 'gemini', label: 'Gemini CLI', hint: 'Use the skill name as instruction' }
+      { id: 'antigravity', label: 'Antigravity', hint: 'Use /skill in Antigravity' },
+      { id: 'cursor', label: 'Cursor', hint: 'Use /skill in Cursor chat' },
+      { id: 'claude-code', label: 'Claude Code', hint: 'Use /skill in Claude Code' },
+      { id: 'codex', label: 'Codex', hint: 'Use /skill in Codex' },
+      { id: 'gemini', label: 'Gemini CLI', hint: 'Use /skill as instruction' }
     ];
 
     const container = el('div', { class: 'mcq-invocations' });

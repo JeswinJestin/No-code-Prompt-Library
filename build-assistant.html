@@ -265,7 +265,7 @@ header{background:var(--dark);color:var(--bg);padding:24px 40px 20px;display:fle
   <!-- AI Recommender -->
   <div class="ai-box">
     <div class="ai-label">AI Skill Recommender</div>
-    <div class="ai-title">Describe your task → get the exact @skills to invoke + bundle them</div>
+    <div class="ai-title">Describe your task → get the exact /skills to invoke + bundle them</div>
     <div class="ai-row">
       <input type="text" id="taskInput" placeholder="e.g. Build auth with Supabase for my SaaS..." onkeydown="if(event.key==='Enter')runAI()">
       <button class="ai-btn" id="aiBtn" onclick="runAI()">Suggest Skills →</button>
@@ -279,7 +279,7 @@ header{background:var(--dark);color:var(--bg);padding:24px 40px 20px;display:fle
   <!-- Cheatsheet -->
   <div class="cheatsheet">
     <div class="cs-head">
-      <div class="cs-title">Phase Quick-Reference — most-used @skills per stage</div>
+      <div class="cs-title">Phase Quick-Reference — most-used /skills per stage</div>
       <button class="cs-toggle" onclick="toggleCS()">collapse ↑</button>
     </div>
     <div class="cs-body" id="csBody"></div>
@@ -507,6 +507,17 @@ function onSearch() {
   render();
 }
 
+function normalizeSkillId(value) {
+  const v = String(value ?? '').trim();
+  if (!v) return '';
+  return v.replace(/^[@/]+/, '').trim();
+}
+
+function formatInvocation(value) {
+  const id = normalizeSkillId(value);
+  return id ? `/${id}` : '';
+}
+
 // ══ TOOL DEFINITIONS ══
 const TOOLS = {
   'Lovable':     {desc:'React + Vite', instructions:'Generate complete React/TypeScript components with Tailwind CSS. Use shadcn/ui where appropriate. Mobile-first responsive classes (sm: md: lg:). Separate component files. Include loading, error, and empty states for all data components. Use React Query or useState for state management. Export clean TypeScript with proper types.'},
@@ -697,13 +708,13 @@ async function runAI() {
   const res = document.getElementById('aiResults'); res.classList.add('on');
   const chips = document.getElementById('aiChips');
   chips.innerHTML=`<div class="ai-msg loading">⟳ Matching task to best skills...</div>`;
-  const ctx = SKILLS.slice(0,60).map(s=>`@${s.id}: ${s.desc}`).join('\n');
+  const ctx = SKILLS.slice(0,60).map(s=>`/${s.id}: ${s.desc}`).join('\n');
   try {
     const r = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
       model:'claude-sonnet-4-20250514',max_tokens:800,
-      system:`You are an Antigravity skills recommender. Given a task, return exactly 5 @skill recommendations from the catalog.
-Return ONLY a JSON array: [{"name":"@skillname","reason":"1 short sentence"}]. No markdown, no preamble.`,
-      messages:[{role:'user',content:`Skills:\n${ctx}\n\nTask: "${task}"\n\nReturn 5 best @skills as JSON array.`}]
+      system:`You are an Antigravity skills recommender. Given a task, return exactly 5 /skill recommendations from the catalog.
+Return ONLY a JSON array: [{"name":"/skillname","reason":"1 short sentence"}]. No markdown, no preamble.`,
+      messages:[{role:'user',content:`Skills:\n${ctx}\n\nTask: "${task}"\n\nReturn 5 best /skills as JSON array.`}]
     })});
     const data = await r.json();
     let txt = data.content?.find(c=>c.type==='text')?.text||'[]';
@@ -711,11 +722,13 @@ Return ONLY a JSON array: [{"name":"@skillname","reason":"1 short sentence"}]. N
     const recs = JSON.parse(txt);
     chips.innerHTML='';
     recs.forEach(rec=>{
+      const inv = formatInvocation(rec.name);
+      if (!inv) return;
       const d=document.createElement('div'); d.className='ai-chip';
-      d.innerHTML=`<div class="ai-chip-name">${rec.name}</div><div class="ai-chip-reason">${rec.reason}</div>
+      d.innerHTML=`<div class="ai-chip-name">${inv}</div><div class="ai-chip-reason">${rec.reason}</div>
 <div class="ai-chip-actions">
-  <button class="ai-chip-action" onclick="copyText('${rec.name}',this)">Copy</button>
-  <button class="ai-chip-action" onclick="addToBundle('${rec.name.replace('@','')}',this)">+ Bundle</button>
+  <button class="ai-chip-action" onclick="copyText('${inv}',this)">Copy</button>
+  <button class="ai-chip-action" onclick="addToBundle('${normalizeSkillId(inv)}',this)">+ Bundle</button>
 </div>`;
       chips.appendChild(d);
     });
@@ -754,9 +767,9 @@ function clearBundle() {
   updateBundleUI();
 }
 function copyBundle() {
-  const text=[...bundle].map(id=>`@${id}`).join(' ');
+  const text=[...bundle].map(id=>`/${id}`).join(' ');
   if(!text) return;
-  navigator.clipboard.writeText(text);
+  copyText(text);
   const btn=document.getElementById('trayCopyBtn');
   btn.textContent='✓ Copied!'; btn.classList.add('done');
   setTimeout(()=>{ btn.textContent='Copy Bundle'; btn.classList.remove('done'); },2000);
@@ -779,10 +792,10 @@ function updateBundleUI() {
   if(bCount) bCount.textContent=`${n} skill${n!==1?'s':''}`;
   chips.innerHTML=[...bundle].map(id=>`
     <div class="tray-chip">
-      <span class="tray-chip-name">@${id}</span>
+      <span class="tray-chip-name">/${id}</span>
       <button class="tray-chip-x" onclick="removeFromBundle('${id}')">×</button>
     </div>`).join('');
-  const prev=[...bundle].map(id=>`@${id}`).join(' ');
+  const prev=[...bundle].map(id=>`/${id}`).join(' ');
   preview.textContent=prev||'(empty)';
   renderOptimizerBundle();
 }
@@ -795,7 +808,7 @@ function renderOptimizerBundle() {
   }
   panel.innerHTML=`<div class="bundle-chips">${[...bundle].map(id=>`
     <div class="bundle-chip-opt">
-      <span>@${id}</span>
+      <span>/${id}</span>
       <button onclick="removeFromBundle('${id}')">×</button>
     </div>`).join('')}</div>`;
 }
@@ -819,7 +832,8 @@ function setPhase(el) {
   renderCatPills(); render();
 }
 function getFiltered() {
-  const q=document.getElementById('searchInput').value.toLowerCase().trim();
+  const qRaw=document.getElementById('searchInput').value.toLowerCase().trim();
+  const q=qRaw.replace(/^[@/]+/, '').trim();
   return SKILLS.filter(s=>{
     const phMatch=activePhase==='ALL'||s.phases.includes(activePhase);
     const cMatch=activeCats.size===0||activeCats.has(s.cat);
@@ -859,14 +873,14 @@ function render() {
     const title = [s.rawCat ? `Source: ${s.rawCat}` : null, s.risk ? `Risk: ${s.risk}` : null].filter(Boolean).join(' · ');
     return `<div class="skill-card${inB?' in-bundle':''}" data-id="${s.id}">
       <div class="sc-top">
-        <div class="sc-name" title="${title.replace(/"/g,'&quot;')}">@${s.id}</div>
+        <div class="sc-name" title="${title.replace(/"/g,'&quot;')}">/${s.id}</div>
         <span class="sc-cat" style="${catCSS(s.cat)}" title="${(s.rawCat||s.cat).replace(/"/g,'&quot;')}">${s.cat}</span>
       </div>
       <div class="sc-desc">${s.desc}</div>
       <div class="sc-foot">
         <div class="phase-dots">${s.phases.map(p=>`<span class="pdot ${p}">${p}</span>`).join('')}</div>
         <div class="sc-btns">
-          <button class="sc-btn copy-only" onclick="copyText('@${s.id}',this)">Copy</button>
+          <button class="sc-btn copy-only" onclick="copyText('/${s.id}',this)">Copy</button>
           <button class="sc-btn add-bundle${inB?' in':''}" onclick="${inB?`removeFromBundle('${s.id}')`:`addToBundle('${s.id}')`}">${inB?'✓ In Bundle':'+ Bundle'}</button>
         </div>
       </div>
@@ -903,11 +917,11 @@ function renderCS() {
   document.getElementById('csBody').innerHTML=Object.entries(PHASE_CHEATSHEET).map(([p,m])=>`
     <div class="cs-col">
       <div class="cs-p">${m.label}</div>
-      ${m.top.map(id=>`<span class="cs-skill" onclick="filterSkill('${id}')">@${id}</span>`).join('')}
+      ${m.top.map(id=>`<span class="cs-skill" onclick="filterSkill('${id}')">/${id}</span>`).join('')}
     </div>`).join('');
 }
 function filterSkill(id) {
-  document.getElementById('searchInput').value=id;
+  document.getElementById('searchInput').value=`/${id}`;
   page = 1;
   activePhase='ALL';
   document.querySelectorAll('.ppill').forEach(p=>p.classList.toggle('active',p.dataset.p==='ALL'));
@@ -957,7 +971,7 @@ async function runOptimizer() {
   document.getElementById('optimizedOutput').style.display='none';
   document.getElementById('optPlaceholder').textContent='⟳ AI is optimizing your prompt...';
   const skillCtx=skills.length>0
-    ? `\nSkills to weave in (translate @skillname to natural guidance, don't use @ syntax in output):\n${skills.map(id=>{const s=SKILLS.find(x=>x.id===id);return s?`${id}: ${s.desc}`:id;}).join('\n')}`
+    ? `\nSkills to weave in (translate /skillname to natural guidance, don't use / syntax in output):\n${skills.map(id=>{const s=SKILLS.find(x=>x.id===id);return s?`/${id}: ${s.desc}`:`/${id}`;}).join('\n')}`
     : '';
   const toolInstr=TOOLS[tool]?.instructions||'Follow best practices for this tool.';
   try {
@@ -968,7 +982,7 @@ async function runOptimizer() {
 Your job:
 1. Take the raw prompt provided.
 2. Improve its clarity, structure, and specificity.
-3. Naturally weave in the skill guidance from the skills list — convert to explicit build instructions (do NOT use @syntax in output).
+3. Naturally weave in the skill guidance from the skills list — convert to explicit build instructions (do NOT use /skill syntax in output).
 4. Add ${tool}-specific technical requirements at the end.
 5. Use clear section headers (## ) to structure the output.
 6. Keep it tight — no fluff, every line should add value.

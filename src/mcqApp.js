@@ -51,11 +51,11 @@ function formatSkillList(skills) {
 
 function buildInvocationBlock(skillIds) {
   const hosts = [
-    { id: 'antigravity', label: 'Antigravity', hint: 'Use @skill in Antigravity' },
-    { id: 'cursor', label: 'Cursor', hint: 'Use @skill in Cursor chat' },
-    { id: 'claude-code', label: 'Claude Code', hint: 'Use >> /skill in Claude Code' },
-    { id: 'codex', label: 'Codex', hint: 'Use @skill in Codex' },
-    { id: 'gemini', label: 'Gemini CLI', hint: 'Use the skill name as instruction' }
+    { id: 'antigravity', label: 'Antigravity', hint: 'Use /skill in Antigravity' },
+    { id: 'cursor', label: 'Cursor', hint: 'Use /skill in Cursor chat' },
+    { id: 'claude-code', label: 'Claude Code', hint: 'Use /skill in Claude Code' },
+    { id: 'codex', label: 'Codex', hint: 'Use /skill in Codex' },
+    { id: 'gemini', label: 'Gemini CLI', hint: 'Use /skill as instruction' }
   ];
 
   const container = el('div', { class: 'mcq-invocations' });

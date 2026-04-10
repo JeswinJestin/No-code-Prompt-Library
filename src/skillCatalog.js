@@ -81,10 +81,7 @@ export function searchSkills(index, queryTokens, { riskAllowlist } = {}) {
 }
 
 export function skillInvocation(id, { host = 'antigravity' } = {}) {
-  const mention = `@${id}`;
-  if (host === 'cursor') return mention;
-  if (host === 'claude-code') return `>> /${id}`;
-  if (host === 'codex') return mention;
-  if (host === 'gemini') return id;
-  return mention;
+  const normalized = String(id ?? '').trim().replace(/^[@/]+/, '');
+  if (!normalized) return '';
+  return `/${normalized}`;
 }
