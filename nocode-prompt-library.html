@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>No-Code Product Build — Prompt Library</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
-
   :root {
     --bg: #f5f4f0;
     --surface: #ffffff;
@@ -37,7 +35,7 @@
   body {
     background: var(--bg);
     color: var(--ink);
-    font-family: 'DM Sans', sans-serif;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
     font-size: 14px;
     line-height: 1.6;
     min-height: 100vh;
@@ -54,7 +52,7 @@
     gap: 20px;
   }
   header h1 {
-    font-family: 'Syne', sans-serif;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
     font-weight: 800;
     font-size: 22px;
     letter-spacing: -0.3px;
@@ -64,7 +62,7 @@
     font-size: 12px;
     color: #9a9790;
     margin-top: 6px;
-    font-family: 'DM Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   }
   .header-badge {
     background: #2d2c28;
@@ -73,7 +71,7 @@
     padding: 6px 14px;
     font-size: 11px;
     color: #9a9790;
-    font-family: 'DM Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     white-space: nowrap;
   }
 
@@ -95,7 +93,7 @@
     background: none;
     border: none;
     padding: 14px 18px;
-    font-family: 'DM Sans', sans-serif;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
     font-size: 12.5px;
     font-weight: 500;
     color: var(--ink-3);
@@ -112,7 +110,7 @@
     border-radius: 4px;
     padding: 1px 6px;
     font-size: 10px;
-    font-family: 'DM Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     color: var(--ink-3);
     transition: background 0.2s, color 0.2s;
   }
@@ -143,7 +141,7 @@
     border-bottom: 1px solid var(--border);
   }
   .phase-tag {
-    font-family: 'DM Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 10px;
     color: var(--ink-3);
     text-transform: uppercase;
@@ -151,7 +149,7 @@
     margin-bottom: 10px;
   }
   .phase-title {
-    font-family: 'Syne', sans-serif;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
     font-weight: 700;
     font-size: 24px;
     letter-spacing: -0.4px;
@@ -201,13 +199,13 @@
   }
   .prompt-card-meta { flex: 1; }
   .prompt-id {
-    font-family: 'DM Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 10px;
     color: var(--ink-3);
     margin-bottom: 4px;
   }
   .prompt-name {
-    font-family: 'Syne', sans-serif;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
     font-weight: 600;
     font-size: 15px;
     letter-spacing: -0.2px;
@@ -222,7 +220,7 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     padding: 7px 14px;
-    font-family: 'DM Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 11px;
     color: var(--ink-2);
     cursor: pointer;
@@ -239,7 +237,7 @@
     background: var(--prompt-bg);
   }
   .prompt-text {
-    font-family: 'DM Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 12px;
     line-height: 1.75;
     color: var(--prompt-ink);
@@ -265,7 +263,7 @@
   }
   .meta-label {
     font-size: 10px;
-    font-family: 'DM Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     color: var(--ink-3);
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -286,7 +284,7 @@
     margin-bottom: 20px;
   }
   .info-block h3 {
-    font-family: 'Syne', sans-serif;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 10px;
@@ -318,7 +316,7 @@
     margin-bottom: 20px;
   }
   .gate-block .gate-label {
-    font-family: 'DM Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 10px;
     color: #92400e;
     text-transform: uppercase;
@@ -353,7 +351,7 @@
     border-radius: 4px;
     padding: 3px 9px;
     font-size: 11px;
-    font-family: 'DM Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     color: var(--ink-2);
   }
 
@@ -368,7 +366,7 @@
     background: var(--surface-2);
     padding: 10px 16px;
     font-size: 11px;
-    font-family: 'DM Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     color: var(--ink-3);
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -394,7 +392,7 @@
     border: none;
     border-radius: var(--radius-sm);
     padding: 9px 18px;
-    font-family: 'DM Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 11px;
     cursor: pointer;
     transition: opacity 0.15s;
@@ -429,7 +427,7 @@
     margin-bottom: 14px;
   }
   .mcq-q {
-    font-family: 'Syne', sans-serif;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
     font-weight: 600;
     font-size: 14px;
     margin-bottom: 10px;
@@ -457,7 +455,7 @@
   .mcq-option.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
   .mcq-free-label {
     margin-top: 12px;
-    font-family: 'DM Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 10px;
     color: var(--ink-3);
     text-transform: uppercase;
@@ -480,7 +478,7 @@
     padding: 14px;
     white-space: pre-wrap;
     word-break: break-word;
-    font-family: 'DM Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 12px;
     line-height: 1.7;
   }
@@ -497,7 +495,7 @@
     padding: 12px;
   }
   .mcq-invocation-title {
-    font-family: 'Syne', sans-serif;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
     font-weight: 600;
     font-size: 13px;
     margin-bottom: 4px;
@@ -514,6 +512,244 @@
     margin-top: 14px;
   }
 
+  .assist-subnav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .assist-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .assist-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+  }
+  .assist-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .assist-input, .assist-select {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 9px 10px;
+    font-size: 12.5px;
+    color: var(--ink);
+    min-width: 220px;
+  }
+  .assist-file {
+    background: var(--surface);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .assist-textarea {
+    width: 100%;
+    margin-top: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px;
+    font-size: 12.5px;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  .assist-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    margin-bottom: 10px;
+  }
+  .assist-hint {
+    font-size: 12.5px;
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+  .assist-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .assist-field label {
+    display: block;
+    font-size: 10px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+  .assist-field input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 9px 10px;
+    font-size: 12.5px;
+    color: var(--ink);
+  }
+  .assist-checks {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .assist-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    color: var(--ink-2);
+  }
+  .assist-check input { accent-color: var(--ink); }
+
+  .assist-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+  }
+  .assist-pill {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    color: var(--ink-2);
+  }
+  .assist-pill.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+  .assist-skill-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+    margin-top: 10px;
+  }
+  .assist-skill-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+  }
+  .assist-skill-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+  .assist-skill-id {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 12px;
+    color: var(--ink);
+    word-break: break-word;
+  }
+  .assist-skill-cat {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--ink-2);
+    white-space: nowrap;
+  }
+  .assist-skill-desc {
+    font-size: 12.5px;
+    color: var(--ink-2);
+    line-height: 1.55;
+    margin-bottom: 10px;
+  }
+  .assist-skill-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .assist-btn {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 7px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    color: var(--ink-2);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+  .assist-btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+  .load-more-row { display: flex; justify-content: center; margin-top: 14px; }
+  .load-more-btn {
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 10px 18px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 11px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .load-more-btn:hover { opacity: 0.85; }
+  .load-more-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  .bundle-tray {
+    margin-top: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+  }
+  .bundle-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .bundle-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .bundle-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .bundle-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 12px;
+    color: var(--ink);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+  .bundle-chip button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    color: var(--ink-2);
+  }
+
+  .assist-pack-item {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px;
+    margin-top: 10px;
+  }
+  .assist-pack-title { font-weight: 600; margin-bottom: 6px; }
+  .assist-pack-meta { color: var(--ink-2); font-size: 12.5px; margin-bottom: 10px; }
+  .assist-pack-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
   /* ── RESPONSIVE ── */
   @media (max-width: 640px) {
     header { padding: 24px 20px; flex-direction: column; align-items: flex-start; }
@@ -521,6 +757,9 @@
     main { padding: 24px 16px 60px; }
     .prompt-meta-grid { grid-template-columns: 1fr 1fr; }
     .mcq-invocations { grid-template-columns: 1fr; }
+    .assist-grid { grid-template-columns: 1fr; }
+    .assist-form { grid-template-columns: 1fr; }
+    .assist-checks { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -1862,7 +2101,7 @@ At what point do you upgrade?
     <div class="example-header">P2-02 → Design System Brief (TaskFlow)</div>
     <div class="example-content">
       <strong>Color Tokens:</strong> Background: #F9F8F5 · Surface: #FFFFFF · Text: #1C1B18 · Text-2: #6B6860 · Accent: #1C1B18 · Border: #E4E2DA<br><br>
-      <strong>Typography:</strong> Display: Syne 700 · Body: DM Sans 400/500 · Mono: DM Mono 400<br><br>
+      <strong>Typography:</strong> System UI (display/body) · System monospace (code)<br><br>
       <strong>Vibe:</strong> Minimal, editorial, no gradients, no shadows. Like a well-designed notebook.<br><br>
       <strong>Anti-patterns:</strong> No colored backgrounds · No rounded pill buttons · No emojis in UI
     </div>
@@ -1885,10 +2124,10 @@ At what point do you upgrade?
 
   <div class="example-box">
     <div class="example-header">P3-02 → Build Prompt for Lovable</div>
-    <div class="example-content" style="font-family:'DM Mono',monospace;font-size:12px;white-space:pre-wrap;">Build the Home screen for TaskFlow using Lovable.
+    <div class="example-content" style="font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, &quot;Liberation Mono&quot;, &quot;Courier New&quot;, monospace;font-size:12px;white-space:pre-wrap;">Build the Home screen for TaskFlow using Lovable.
 
-Design tokens: BG #F9F8F5, Text #1C1B18, Accent #1C1B18, Font: DM Sans
-Layout: Top bar with "TaskFlow" logo (Syne 700) + "Add" button (top right)
+Design tokens: BG #F9F8F5, Text #1C1B18, Accent #1C1B18, Font: system UI
+Layout: Top bar with "TaskFlow" logo (bold) + "Add" button (top right)
 Body: Tab row (All / Active / Done) + task list below
 Task row: Checkbox (left) + task title + due date (right) + optional priority tag (small chip)
 Empty state: Centered text "Nothing here yet." with a light subtext "Add your first task above."
@@ -1899,7 +2138,7 @@ Static data for now — use 3 dummy tasks.</div>
 
   <div class="example-box">
     <div class="example-header">P4-01 → Data Model (Supabase)</div>
-    <div class="example-content" style="font-family:'DM Mono',monospace;font-size:12px;">
+    <div class="example-content" style="font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, &quot;Liberation Mono&quot;, &quot;Courier New&quot;, monospace;font-size:12px;">
 Table: tasks<br>
 id | uuid | PK<br>
 user_id | uuid | FK → auth.users<br>
@@ -1946,27 +2185,117 @@ RLS: Read/Write only where user_id = auth.uid()
   <div class="phase-header">
     <div class="phase-tag">Build Assistant</div>
     <div class="phase-title">Skills · Bundles · Prompt Optimizer</div>
-    <div class="phase-desc">Browse the full Antigravity skills catalog, build bundles, and generate tool-specific optimized build prompts.</div>
+    <div class="phase-desc">Generate stable, structured prompts for no-code MVPs, build reusable skill bundles, and export/share your configurations. No external dependencies required.</div>
   </div>
 
   <div class="info-block">
-    <h3>Tip</h3>
+    <h3>Quick Start</h3>
     <ul>
-      <li>Use search + phase filters to narrow from 1300+ skills.</li>
-      <li>Add skills to a bundle, then switch to Optimizer to generate an improved prompt.</li>
+      <li>Select a stage + template, fill parameters, then copy or add it to an export pack.</li>
+      <li>Upload a local <strong>skills_index.json</strong> to browse 1300+ skills offline (optional).</li>
+      <li>Use Bundles to keep a minimal, repeatable set of /skills per project.</li>
     </ul>
   </div>
 
-  <div class="example-box">
-    <div class="example-header">Embedded App</div>
-    <div class="example-content" style="padding:0;">
-      <iframe
-        title="Build Assistant"
-        src="./build-assistant.html"
-        style="width:100%;height:80vh;border:0;border-radius:10px;overflow:hidden;"
-        loading="lazy"
-      ></iframe>
+  <div class="assist-subnav">
+    <button class="tool-chip" type="button" onclick="document.getElementById('assistTemplates').scrollIntoView({behavior:'smooth',block:'start'})">Templates</button>
+    <button class="tool-chip" type="button" onclick="document.getElementById('assistSkills').scrollIntoView({behavior:'smooth',block:'start'})">Skills</button>
+    <button class="tool-chip" type="button" onclick="document.getElementById('assistOptimizer').scrollIntoView({behavior:'smooth',block:'start'})">Optimizer</button>
+    <button class="tool-chip" type="button" onclick="document.getElementById('assistExport').scrollIntoView({behavior:'smooth',block:'start'})">Export</button>
+  </div>
+
+  <div class="info-block" id="assistTemplates">
+    <h3>Structured Prompt Templates</h3>
+    <div class="assist-grid">
+      <div class="assist-panel">
+        <div class="meta-label">Stage</div>
+        <select id="tplStageSelect" class="assist-select"></select>
+
+        <div class="meta-label" style="margin-top:12px;">Template</div>
+        <select id="tplTemplateSelect" class="assist-select"></select>
+
+        <div class="meta-label" style="margin-top:12px;">Parameters</div>
+        <div id="tplParams" class="assist-form"></div>
+
+        <div class="meta-label" style="margin-top:12px;">Prompting Strategies</div>
+        <div id="tplStrategies" class="assist-checks"></div>
+
+        <div class="assist-actions">
+          <button class="copy-all-btn" type="button" id="tplCopyBtn">Copy Prompt</button>
+          <button class="copy-all-btn" type="button" id="tplAddBtn">Add to Export Pack</button>
+        </div>
+        <div class="assist-hint" id="tplHint"></div>
+      </div>
+
+      <div class="assist-panel">
+        <div class="meta-label">Preview</div>
+        <pre class="mcq-pre" id="tplPreview"></pre>
+      </div>
     </div>
+  </div>
+
+  <div class="info-block" id="assistSkills">
+    <h3>Skills Catalog (Offline)</h3>
+    <div class="assist-row">
+      <input id="skillsSearch" class="assist-input" type="text" placeholder="Search skills (supports @skill and /skill input)…">
+      <input id="skillsUpload" class="assist-file" type="file" accept=".json,application/json">
+    </div>
+    <div class="assist-hint" id="skillsMeta"></div>
+    <div class="assist-pills" id="skillsCats"></div>
+    <div class="assist-skill-grid" id="skillsGrid"></div>
+    <div class="load-more-row" id="skillsLoadRow" style="display:none;">
+      <button class="load-more-btn" id="skillsLoadBtn" type="button">Load more</button>
+    </div>
+
+    <div class="bundle-tray" id="bundleTray">
+      <div class="bundle-head">
+        <div><strong>Bundle</strong> <span id="bundleCount" class="header-badge" style="margin-left:10px;">0</span></div>
+        <div class="bundle-actions">
+          <button class="copy-all-btn" type="button" id="bundleCopyBtn">Copy Bundle</button>
+          <button class="copy-all-btn" type="button" id="bundleClearBtn">Clear</button>
+        </div>
+      </div>
+      <div class="bundle-chips" id="bundleChips"></div>
+    </div>
+  </div>
+
+  <div class="info-block" id="assistOptimizer">
+    <h3>Prompt Optimizer (Local)</h3>
+    <div class="assist-row">
+      <select id="optTool" class="assist-select">
+        <option value="trae">Trae</option>
+        <option value="cursor">Cursor</option>
+        <option value="antigravity">Google Antigravity</option>
+      </select>
+      <select id="optStage" class="assist-select">
+        <option value="ideation">Ideation</option>
+        <option value="prototyping">Prototyping</option>
+        <option value="mvp">MVP Build</option>
+        <option value="deployment">Deployment</option>
+      </select>
+    </div>
+    <textarea id="optRaw" class="assist-textarea" rows="6" placeholder="Paste your rough prompt or task description…"></textarea>
+    <div class="assist-actions">
+      <button class="copy-all-btn" type="button" id="optGenBtn">Generate Optimized Prompt</button>
+      <button class="copy-all-btn" type="button" id="optCopyBtn">Copy</button>
+      <button class="copy-all-btn" type="button" id="optAddBtn">Add to Export Pack</button>
+    </div>
+    <pre class="mcq-pre" id="optOut"></pre>
+  </div>
+
+  <div class="info-block" id="assistExport">
+    <h3>Export / Share</h3>
+    <div class="assist-actions">
+      <button class="copy-all-btn" type="button" id="packExportJson">Download JSON</button>
+      <button class="copy-all-btn" type="button" id="packExportMd">Download Markdown</button>
+      <label class="copy-all-btn" style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;">
+        Import JSON
+        <input id="packImport" type="file" accept=".json,application/json" style="display:none;">
+      </label>
+      <button class="copy-all-btn" type="button" id="packClear">Clear Pack</button>
+    </div>
+    <div class="assist-hint">Exports include saved prompts, selected stages, and your current /skill bundle.</div>
+    <div id="packList" class="assist-pack"></div>
   </div>
 </div>
 
@@ -2136,19 +2465,25 @@ RLS: Read/Write only where user_id = auth.uid()
   setCopyAllState();
 </script>
 <script>
-  const DEFAULT_SKILLS_INDEX_URL =
-    'https://raw.githubusercontent.com/sickn33/antigravity-awesome-skills/main/skills_index.json';
+  async function loadSkillCatalog() {
+    try {
+      const raw = localStorage.getItem('npl_skills_v1');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length) return parsed;
+      }
+    } catch (e) {}
 
-  async function loadSkillCatalog({ url = DEFAULT_SKILLS_INDEX_URL } = {}) {
-    const res = await fetch(url, { cache: 'force-cache' });
-    if (!res.ok) {
-      throw new Error(`Failed to load skills catalog: ${res.status}`);
-    }
-    const skills = await res.json();
-    if (!Array.isArray(skills)) {
-      throw new Error('Skills catalog is not an array');
-    }
-    return skills;
+    return [
+      { id: 'brainstorming', description: 'Turn ideas into a concrete MVP plan with constraints and deliverables.', category: 'Product', risk: 'none' },
+      { id: 'frontend-design', description: 'UI/UX guidance for responsive, accessible, polished interfaces.', category: 'Design', risk: 'none' },
+      { id: 'api-design-principles', description: 'Design stable APIs, schemas, validations, and contracts.', category: 'Backend', risk: 'none' },
+      { id: 'security-auditor', description: 'Threat modeling, auth rules, validation, and security review.', category: 'Security', risk: 'safe' },
+      { id: 'test-driven-development', description: 'Define tests first and validate critical paths and edge cases.', category: 'Testing', risk: 'none' },
+      { id: 'debugging-strategies', description: 'Systematic debugging workflow for reproducible fixes.', category: 'Testing', risk: 'none' },
+      { id: 'lint-and-validate', description: 'Quality gates: linting, validation, consistency checks.', category: 'Testing', risk: 'none' },
+      { id: 'create-pr', description: 'Package work into clean commits and reviewable PRs.', category: 'DevOps', risk: 'none' }
+    ];
   }
 
   function tokenizeSkillCatalog(text) {
@@ -2302,11 +2637,248 @@ RLS: Read/Write only where user_id = auth.uid()
     return node;
   }
 
-  async function loadJson(path) {
-    const res = await fetch(path, { cache: 'no-cache' });
-    if (!res.ok) throw new Error(`Failed to load ${path}: ${res.status}`);
-    return res.json();
-  }
+  const MCQ_TEMPLATES = {
+    version: '1.0',
+    stages: [
+      {
+        id: 'ideation',
+        title: 'Ideation',
+        description: 'Lock scope and success criteria with <3s clicks.',
+        questions: [
+          {
+            id: 'initial_description',
+            type: 'text',
+            prompt: 'Describe what you’re building (1 sentence)',
+            help: 'This captures the original requirements. Next, answer quick MCQs to clarify scope.',
+            gatesFollowing: true,
+            text: {
+              required: true,
+              label: 'Required',
+              placeholder: 'e.g., A booking app for local fitness classes',
+              maxLength: 160
+            }
+          },
+          {
+            id: 'target_user',
+            type: 'mcq',
+            prompt: 'Who is this for?',
+            answers: [
+              { id: 'b2c', label: 'Consumers (B2C)', intents: ['product-brief', 'ux'] },
+              { id: 'b2b', label: 'Teams (B2B)', intents: ['product-brief', 'ux', 'api'] },
+              { id: 'internal', label: 'Internal users', intents: ['product-brief', 'api', 'database'] },
+              { id: 'devs', label: 'Developers', intents: ['product-brief', 'api'] }
+            ]
+          },
+          {
+            id: 'timeline',
+            type: 'mcq',
+            prompt: 'Timeline for MVP?',
+            answers: [
+              { id: 'hours', label: 'Today', intents: ['plan'] },
+              { id: 'week', label: 'This week', intents: ['plan', 'testing'] },
+              { id: 'month', label: 'This month', intents: ['plan', 'testing', 'security'] }
+            ]
+          },
+          {
+            id: 'product_type',
+            type: 'mcq',
+            prompt: 'What are you building?',
+            optionalFreeText: { enabled: true, label: 'Optional: add context', placeholder: 'e.g., Marketplace, CRM, booking, directory…' },
+            answers: [
+              { id: 'saas', label: 'SaaS web app', intents: ['frontend', 'backend'] },
+              { id: 'landing', label: 'Landing page', intents: ['ux', 'frontend'] },
+              { id: 'tool', label: 'Internal tool', intents: ['api', 'database'] },
+              { id: 'mobile', label: 'Mobile app', intents: ['ux', 'frontend', 'backend'] }
+            ]
+          },
+          {
+            id: 'core_goal',
+            type: 'mcq',
+            prompt: 'Primary goal?',
+            optionalFreeText: { enabled: true, label: 'Optional: custom goal', placeholder: 'e.g., Reduce support tickets' },
+            answers: [
+              { id: 'acquire', label: 'Acquire users', intents: ['plan', 'ux'] },
+              { id: 'convert', label: 'Convert leads', intents: ['plan', 'ux', 'frontend'] },
+              { id: 'operate', label: 'Operate workflow', intents: ['plan', 'api', 'database'] },
+              { id: 'deliver', label: 'Deliver service', intents: ['plan', 'backend', 'integrations'] }
+            ]
+          },
+          {
+            id: 'auth_needed',
+            type: 'mcq',
+            prompt: 'User accounts needed?',
+            answers: [
+              { id: 'auth_yes', label: 'Yes', intents: ['auth', 'security'] },
+              { id: 'auth_no', label: 'No', intents: ['plan'] }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'design',
+        title: 'Design',
+        description: 'Pick UX direction and accessibility requirements quickly.',
+        questions: [
+          {
+            id: 'style',
+            type: 'mcq',
+            prompt: 'Visual style?',
+            optionalFreeText: { enabled: true, label: 'Optional: reference link', placeholder: 'Paste a URL (Figma, site, screenshot link)' },
+            answers: [
+              { id: 'minimal', label: 'Minimal / clean', intents: ['ux'] },
+              { id: 'bold', label: 'Bold / branded', intents: ['ux'] },
+              { id: 'dashboard', label: 'Dashboard / data', intents: ['ux', 'frontend'] },
+              { id: 'mobilefirst', label: 'Mobile-first', intents: ['ux', 'frontend'] }
+            ]
+          },
+          {
+            id: 'a11y',
+            type: 'mcq',
+            prompt: 'Accessibility level?',
+            answers: [
+              { id: 'wcag_aa', label: 'WCAG AA', intents: ['ux', 'testing'] },
+              { id: 'best_effort', label: 'Best effort', intents: ['ux'] }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'frontend',
+        title: 'Front-End',
+        description: 'Decide UI scope and constraints fast.',
+        questions: [
+          {
+            id: 'screens',
+            type: 'mcq',
+            prompt: 'How many screens in MVP?',
+            answers: [
+              { id: 's1', label: '1–2', intents: ['frontend', 'ux'] },
+              { id: 's3', label: '3–5', intents: ['frontend', 'ux'] },
+              { id: 's6', label: '6+', intents: ['plan', 'frontend'] }
+            ]
+          },
+          {
+            id: 'state',
+            type: 'mcq',
+            prompt: 'UI complexity?',
+            answers: [
+              { id: 'static', label: 'Mostly static', intents: ['frontend'] },
+              { id: 'forms', label: 'Forms + validation', intents: ['frontend', 'testing'] },
+              { id: 'realtime', label: 'Real-time updates', intents: ['backend', 'api'] }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'backend',
+        title: 'Back-End',
+        description: 'Pick data + API needs quickly.',
+        questions: [
+          {
+            id: 'data',
+            type: 'mcq',
+            prompt: 'Persistent data needed?',
+            answers: [
+              { id: 'db_yes', label: 'Yes', intents: ['database', 'api', 'security'] },
+              { id: 'db_no', label: 'No', intents: ['api'] }
+            ]
+          },
+          {
+            id: 'payments',
+            type: 'mcq',
+            prompt: 'Payments needed?',
+            answers: [
+              { id: 'pay_yes', label: 'Yes', intents: ['payments', 'security'] },
+              { id: 'pay_no', label: 'No', intents: ['plan'] }
+            ]
+          },
+          {
+            id: 'integrations',
+            type: 'mcq',
+            prompt: 'External integrations?',
+            answers: [
+              { id: 'int_none', label: 'None', intents: ['api'] },
+              { id: 'int_webhooks', label: 'Webhooks', intents: ['integrations', 'api'] },
+              { id: 'int_zapier', label: 'Zapier/Make', intents: ['integrations'] }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'testing',
+        title: 'Testing',
+        description: 'Choose test depth fast.',
+        questions: [
+          {
+            id: 'test_depth',
+            type: 'mcq',
+            prompt: 'Test depth?',
+            answers: [
+              { id: 'smoke', label: 'Smoke tests', intents: ['testing'] },
+              { id: 'critical', label: 'Critical-path', intents: ['testing', 'debugging'] },
+              { id: 'full', label: 'Full regression', intents: ['testing', 'quality'] }
+            ]
+          },
+          {
+            id: 'security_review',
+            type: 'mcq',
+            prompt: 'Security review?',
+            answers: [
+              { id: 'sec_yes', label: 'Yes', intents: ['security'] },
+              { id: 'sec_no', label: 'No', intents: ['testing'] }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'deployment',
+        title: 'Deployment',
+        description: 'Ship fast with predictable steps.',
+        questions: [
+          {
+            id: 'hosting',
+            type: 'mcq',
+            prompt: 'Hosting target?',
+            answers: [
+              { id: 'gh_pages', label: 'GitHub Pages', intents: ['shipping'] },
+              { id: 'custom_domain', label: 'Custom domain', intents: ['shipping', 'security'] },
+              { id: 'nocode_host', label: 'No-code hosting', intents: ['shipping'] }
+            ]
+          },
+          {
+            id: 'observability',
+            type: 'mcq',
+            prompt: 'Analytics/logging?',
+            answers: [
+              { id: 'basic', label: 'Basic', intents: ['shipping'] },
+              { id: 'important', label: 'Important', intents: ['shipping', 'quality'] }
+            ]
+          }
+        ]
+      }
+    ]
+  };
+
+  const MCQ_INTENT_MAP = {
+    version: '1.0',
+    defaults: { riskAllowlist: ['safe', 'none'], maxSkills: 8, perIntentMaxSkills: 2 },
+    intents: [
+      { id: 'plan', title: 'Planning', priority: 90, preferredSkillIds: ['brainstorming'], fallbackQueryTokens: ['plan', 'brainstorm', 'requirements', 'scope'] },
+      { id: 'product-brief', title: 'Product Brief', priority: 80, fallbackQueryTokens: ['product', 'brief', 'prd', 'spec'] },
+      { id: 'ux', title: 'UX / UI', priority: 80, preferredSkillIds: ['frontend-design'], fallbackQueryTokens: ['ux', 'ui', 'design', 'accessibility', 'wcag'] },
+      { id: 'frontend', title: 'Front-End Build', priority: 70, fallbackQueryTokens: ['frontend', 'ui', 'responsive', 'components'] },
+      { id: 'api', title: 'API Design', priority: 70, preferredSkillIds: ['api-design-principles'], fallbackQueryTokens: ['api', 'rest', 'endpoints', 'schema'] },
+      { id: 'database', title: 'Database', priority: 70, fallbackQueryTokens: ['database', 'postgres', 'sql', 'schema', 'supabase'] },
+      { id: 'auth', title: 'Authentication', priority: 75, fallbackQueryTokens: ['auth', 'authentication', 'session', 'jwt', 'oauth'] },
+      { id: 'payments', title: 'Payments', priority: 60, fallbackQueryTokens: ['payments', 'stripe', 'billing', 'subscriptions'] },
+      { id: 'integrations', title: 'Integrations / Automation', priority: 55, fallbackQueryTokens: ['integrations', 'zapier', 'make', 'webhook'] },
+      { id: 'testing', title: 'Testing', priority: 65, preferredSkillIds: ['test-driven-development'], fallbackQueryTokens: ['testing', 'qa', 'test', 'acceptance'] },
+      { id: 'debugging', title: 'Debugging', priority: 40, preferredSkillIds: ['debugging-strategies'], fallbackQueryTokens: ['debug', 'troubleshoot', 'errors'] },
+      { id: 'security', title: 'Security', priority: 85, preferredSkillIds: ['security-auditor'], fallbackQueryTokens: ['security', 'threat', 'owasp', 'rls'] },
+      { id: 'quality', title: 'Lint / Validate', priority: 45, preferredSkillIds: ['lint-and-validate'], fallbackQueryTokens: ['lint', 'validate', 'quality'] },
+      { id: 'shipping', title: 'Shipping', priority: 50, preferredSkillIds: ['create-pr'], fallbackQueryTokens: ['release', 'deploy', 'ship', 'github'] }
+    ]
+  };
 
   function collectIntentsFromAnswers(stage, answersByQuestionId) {
     const intents = [];
@@ -2361,10 +2933,8 @@ RLS: Read/Write only where user_id = auth.uid()
   }
 
   async function mountMcqApp(rootEl) {
-    const [templates, intentMap] = await Promise.all([
-      loadJson('./data/mcq.templates.json'),
-      loadJson('./data/intent-map.json')
-    ]);
+    const templates = MCQ_TEMPLATES;
+    const intentMap = MCQ_INTENT_MAP;
 
     const stageOrder = templates.stages.map(s => s.id);
 
@@ -2382,12 +2952,7 @@ RLS: Read/Write only where user_id = auth.uid()
     rootEl.appendChild(header);
     rootEl.appendChild(loading);
 
-    let skills;
-    try {
-      skills = await loadSkillCatalog({ url: './data/skills_index.json' });
-    } catch (e) {
-      skills = await loadSkillCatalog();
-    }
+    const skills = await loadSkillCatalog();
     const skillIndex = buildSkillIndex(skills);
 
     loading.textContent = `Loaded ${skillIndex.total} Antigravity skills.`;
@@ -2683,6 +3248,897 @@ RLS: Read/Write only where user_id = auth.uid()
   } else {
     safeMount();
   }
+
+  (function () {
+    const STORAGE = {
+      bundle: 'npl_bundle_v1',
+      pack: 'npl_pack_v1',
+      skills: 'npl_skills_v1'
+    };
+
+    const CORE_SKILLS = [
+      { id: 'brainstorming', description: 'Turn ideas into a concrete MVP plan with constraints and deliverables.', category: 'Product', risk: 'none' },
+      { id: 'frontend-design', description: 'UI/UX guidance for responsive, accessible, polished interfaces.', category: 'Design', risk: 'none' },
+      { id: 'api-design-principles', description: 'Design stable APIs, schemas, validations, and contracts.', category: 'Backend', risk: 'none' },
+      { id: 'security-auditor', description: 'Threat modeling, auth rules, validation, and security review.', category: 'Security', risk: 'safe' },
+      { id: 'test-driven-development', description: 'Define tests first and validate critical paths and edge cases.', category: 'Testing', risk: 'none' },
+      { id: 'debugging-strategies', description: 'Systematic debugging workflow for reproducible fixes.', category: 'Testing', risk: 'none' },
+      { id: 'lint-and-validate', description: 'Quality gates: linting, validation, consistency checks.', category: 'Testing', risk: 'none' },
+      { id: 'create-pr', description: 'Package work into clean commits and reviewable PRs.', category: 'DevOps', risk: 'none' }
+    ];
+
+    const STRATEGIES = [
+      { id: 'constraints', label: 'Constraints + non-goals', on: true },
+      { id: 'outputs', label: 'Explicit outputs + formats', on: true },
+      { id: 'validation', label: 'Validation + error prevention', on: true },
+      { id: 'tests', label: 'Test plan + edge cases', on: true },
+      { id: 'next', label: 'Next-step instructions', on: true }
+    ];
+
+    const TEMPLATES = {
+      ideation: {
+        label: 'Ideation',
+        templates: [
+          {
+            id: 'ideation_prd',
+            title: 'MVP PRD (1-page)',
+            summary: 'Scope, users, flows, acceptance criteria.',
+            params: [
+              { key: 'project_name', label: 'Project name', required: true, placeholder: 'e.g., TaskFlow' },
+              { key: 'one_liner', label: 'One-liner', required: true, placeholder: 'e.g., A task manager for freelancers' },
+              { key: 'target_users', label: 'Target users', required: true, placeholder: 'e.g., freelancers' }
+            ],
+            recommendedSkillIds: ['brainstorming', 'security-auditor', 'test-driven-development'],
+            body:
+              'You are a senior product + engineering partner.\n' +
+              '\n' +
+              'Project: {{project_name}}\n' +
+              'One-liner: {{one_liner}}\n' +
+              'Target users: {{target_users}}\n' +
+              '\n' +
+              'Task:\n' +
+              'Create a 1-page MVP PRD for this no-code product.\n' +
+              '\n' +
+              'Output format (use these headers):\n' +
+              '## Problem\n' +
+              '## User Personas\n' +
+              '## Core User Journey\n' +
+              '## MVP Scope (Must / Should / Won’t)\n' +
+              '## Data Needed\n' +
+              '## Risks & Mitigations\n' +
+              '## Acceptance Criteria (☐ checklist)\n' +
+              '## Next Step\n'
+          },
+          {
+            id: 'ideation_scope_guardrails',
+            title: 'Scope Guardrails',
+            summary: 'Non-goals, constraints, and success metrics.',
+            params: [
+              { key: 'project_name', label: 'Project name', required: true, placeholder: 'e.g., TaskFlow' },
+              { key: 'success_metric', label: 'Success metric', required: true, placeholder: 'e.g., tasks completed/user/week' }
+            ],
+            recommendedSkillIds: ['brainstorming'],
+            body:
+              'Project: {{project_name}}\n' +
+              '\n' +
+              'Task:\n' +
+              'Define MVP guardrails and success metrics for a no-code build.\n' +
+              '\n' +
+              'Output:\n' +
+              '## Must-have outcomes\n' +
+              '## Constraints (time, team, platform)\n' +
+              '## Non-goals (explicitly out of scope)\n' +
+              '## Risks\n' +
+              '## Success metric\n' +
+              '- Primary: {{success_metric}}\n' +
+              '- Secondary: (suggest 2)\n' +
+              '## Next Step\n'
+          }
+        ]
+      },
+      prototyping: {
+        label: 'Prototyping',
+        templates: [
+          {
+            id: 'proto_ui_flow',
+            title: 'UI Flow + Screen Specs',
+            summary: 'Screen list, components, and behaviors.',
+            params: [
+              { key: 'project_name', label: 'Project name', required: true, placeholder: 'e.g., TaskFlow' },
+              { key: 'core_flow', label: 'Core flow', required: true, placeholder: 'e.g., add task → view list → complete task' }
+            ],
+            recommendedSkillIds: ['frontend-design', 'test-driven-development'],
+            body:
+              'Project: {{project_name}}\n' +
+              'Core flow: {{core_flow}}\n' +
+              '\n' +
+              'Task:\n' +
+              'Create a UI flow + screen specs for a no-code prototype.\n' +
+              '\n' +
+              'Output:\n' +
+              '## Screens (3–6)\n' +
+              '## Navigation map\n' +
+              '## Screen specs (per screen)\n' +
+              '- Purpose\n' +
+              '- Components\n' +
+              '- Empty states\n' +
+              '- Validation rules\n' +
+              '## Accessibility (WCAG AA)\n' +
+              '## Next Step\n'
+          },
+          {
+            id: 'proto_design_tokens',
+            title: 'Design Tokens Brief',
+            summary: 'Colors, spacing, typography, components.',
+            params: [
+              { key: 'brand_vibe', label: 'Brand vibe', required: true, placeholder: 'e.g., minimal, editorial, no gradients' }
+            ],
+            recommendedSkillIds: ['frontend-design'],
+            body:
+              'Task:\n' +
+              'Define a small design system for a no-code UI.\n' +
+              '\n' +
+              'Brand vibe: {{brand_vibe}}\n' +
+              '\n' +
+              'Output:\n' +
+              '## Color tokens\n' +
+              '## Typography\n' +
+              '## Spacing + radii\n' +
+              '## Components (buttons, inputs, cards)\n' +
+              '## Anti-patterns\n' +
+              '## Next Step\n'
+          }
+        ]
+      },
+      mvp: {
+        label: 'MVP Building',
+        templates: [
+          {
+            id: 'mvp_supabase_schema',
+            title: 'Supabase Schema + RLS',
+            summary: 'Tables, indexes, and security policies.',
+            params: [
+              { key: 'entities', label: 'Core entities', required: true, placeholder: 'e.g., tasks, projects, users' },
+              { key: 'ownership', label: 'Ownership model', required: true, placeholder: 'e.g., user-owned rows' }
+            ],
+            recommendedSkillIds: ['api-design-principles', 'security-auditor'],
+            body:
+              'Task:\n' +
+              'Design a Supabase Postgres schema for a no-code MVP and provide RLS policies.\n' +
+              '\n' +
+              'Core entities: {{entities}}\n' +
+              'Ownership model: {{ownership}}\n' +
+              '\n' +
+              'Output (SQL-first):\n' +
+              '## Tables\n' +
+              '## Indexes\n' +
+              '## RLS policies (per table)\n' +
+              '## Validation rules\n' +
+              '## Common failure modes + fixes\n' +
+              '## Next Step\n'
+          },
+          {
+            id: 'mvp_auth_google',
+            title: 'Google OAuth + Session Handling',
+            summary: 'Auth flows, protected routes, and error states.',
+            params: [
+              { key: 'app_type', label: 'App type', required: true, placeholder: 'e.g., web app' }
+            ],
+            recommendedSkillIds: ['security-auditor', 'api-design-principles'],
+            body:
+              'Task:\n' +
+              'Implement Google OAuth using Supabase Auth with secure session handling.\n' +
+              '\n' +
+              'App type: {{app_type}}\n' +
+              '\n' +
+              'Output:\n' +
+              '## Auth flow steps\n' +
+              '## Session storage + refresh\n' +
+              '## Protected routes + access checks\n' +
+              '## Error handling (auth failures)\n' +
+              '## Security checklist\n' +
+              '## Next Step\n'
+          },
+          {
+            id: 'mvp_frontend_build',
+            title: 'Front-end Build Checklist',
+            summary: 'Components, state, loading, errors, accessibility.',
+            params: [
+              { key: 'screens', label: 'Screens', required: true, placeholder: 'e.g., Home, Detail, Settings' }
+            ],
+            recommendedSkillIds: ['frontend-design', 'lint-and-validate', 'test-driven-development'],
+            body:
+              'Task:\n' +
+              'Create a production-ready front-end implementation checklist for a no-code MVP.\n' +
+              '\n' +
+              'Screens: {{screens}}\n' +
+              '\n' +
+              'Output:\n' +
+              '## Components per screen\n' +
+              '## State management plan\n' +
+              '## Loading + error states\n' +
+              '## Accessibility requirements\n' +
+              '## Performance guardrails\n' +
+              '## Next Step\n'
+          }
+        ]
+      },
+      deployment: {
+        label: 'Deployment',
+        templates: [
+          {
+            id: 'deploy_ci_cd',
+            title: 'CI + Deploy Plan',
+            summary: 'GitHub Actions + Vercel deploy gates.',
+            params: [
+              { key: 'repo_name', label: 'Repo name', required: true, placeholder: 'e.g., no-code-mvp' }
+            ],
+            recommendedSkillIds: ['create-pr', 'test-driven-development', 'lint-and-validate'],
+            body:
+              'Repo: {{repo_name}}\n' +
+              '\n' +
+              'Task:\n' +
+              'Create a CI/CD plan with GitHub Actions and Vercel deployment.\n' +
+              '\n' +
+              'Output:\n' +
+              '## Branch strategy\n' +
+              '## CI pipeline (tests, checks)\n' +
+              '## Preview deployments\n' +
+              '## Production deployment + rollback\n' +
+              '## Environment variables checklist\n' +
+              '## Next Step\n'
+          },
+          {
+            id: 'deploy_monitoring',
+            title: 'Monitoring + Analytics',
+            summary: 'Error tracking, events, and KPIs.',
+            params: [
+              { key: 'kpi', label: 'Primary KPI', required: true, placeholder: 'e.g., activations/week' }
+            ],
+            recommendedSkillIds: ['security-auditor', 'test-driven-development'],
+            body:
+              'Task:\n' +
+              'Design a lightweight monitoring + analytics plan for a no-code MVP.\n' +
+              '\n' +
+              'Primary KPI: {{kpi}}\n' +
+              '\n' +
+              'Output:\n' +
+              '## Events to track\n' +
+              '## Error reporting strategy\n' +
+              '## Data retention + privacy\n' +
+              '## Dashboard sketch\n' +
+              '## Next Step\n'
+          }
+        ]
+      }
+    };
+
+    function getJson(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      } catch (e) {
+        return fallback;
+      }
+    }
+
+    function setJson(key, value) {
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+      } catch (e) {}
+    }
+
+    function downloadFile(filename, content, mime) {
+      const blob = new Blob([content], { type: mime });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function formatSkillId(id) {
+      const normalized = String(id ?? '').trim().replace(/^[@/]+/, '');
+      return normalized ? `/${normalized}` : '';
+    }
+
+    let skillsCatalog = CORE_SKILLS.slice();
+    let assistantSkillIndex = buildSkillIndex(skillsCatalog);
+    let skillsQuery = '';
+    let skillsActiveCat = 'ALL';
+    let skillsPage = 1;
+    const SKILLS_PAGE_SIZE = 60;
+
+    let bundle = new Set(getJson(STORAGE.bundle, []));
+    let pack = getJson(STORAGE.pack, []);
+
+    const els = {
+      tplStage: document.getElementById('tplStageSelect'),
+      tplTemplate: document.getElementById('tplTemplateSelect'),
+      tplParams: document.getElementById('tplParams'),
+      tplStrategies: document.getElementById('tplStrategies'),
+      tplPreview: document.getElementById('tplPreview'),
+      tplCopy: document.getElementById('tplCopyBtn'),
+      tplAdd: document.getElementById('tplAddBtn'),
+      tplHint: document.getElementById('tplHint'),
+
+      skillsSearch: document.getElementById('skillsSearch'),
+      skillsUpload: document.getElementById('skillsUpload'),
+      skillsMeta: document.getElementById('skillsMeta'),
+      skillsCats: document.getElementById('skillsCats'),
+      skillsGrid: document.getElementById('skillsGrid'),
+      skillsLoadRow: document.getElementById('skillsLoadRow'),
+      skillsLoadBtn: document.getElementById('skillsLoadBtn'),
+
+      bundleCount: document.getElementById('bundleCount'),
+      bundleChips: document.getElementById('bundleChips'),
+      bundleCopy: document.getElementById('bundleCopyBtn'),
+      bundleClear: document.getElementById('bundleClearBtn'),
+
+      optTool: document.getElementById('optTool'),
+      optStage: document.getElementById('optStage'),
+      optRaw: document.getElementById('optRaw'),
+      optGen: document.getElementById('optGenBtn'),
+      optCopy: document.getElementById('optCopyBtn'),
+      optAdd: document.getElementById('optAddBtn'),
+      optOut: document.getElementById('optOut'),
+
+      packList: document.getElementById('packList'),
+      packExportJson: document.getElementById('packExportJson'),
+      packExportMd: document.getElementById('packExportMd'),
+      packImport: document.getElementById('packImport'),
+      packClear: document.getElementById('packClear')
+    };
+
+    if (!els.tplStage) return;
+
+    function renderStrategies(active) {
+      els.tplStrategies.innerHTML = '';
+      STRATEGIES.forEach(s => {
+        const checked = active?.[s.id] ?? s.on;
+        const row = document.createElement('label');
+        row.className = 'assist-check';
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.checked = checked;
+        input.addEventListener('change', () => updateTemplatePreview());
+        input.dataset.id = s.id;
+        row.appendChild(input);
+        const span = document.createElement('span');
+        span.textContent = s.label;
+        row.appendChild(span);
+        els.tplStrategies.appendChild(row);
+      });
+    }
+
+    function getActiveStrategies() {
+      const out = {};
+      els.tplStrategies.querySelectorAll('input[type="checkbox"]').forEach(i => {
+        out[i.dataset.id] = i.checked;
+      });
+      return out;
+    }
+
+    function getActiveTemplate() {
+      const stageId = els.tplStage.value;
+      const templateId = els.tplTemplate.value;
+      const stage = TEMPLATES[stageId];
+      const tpl = stage?.templates?.find(t => t.id === templateId);
+      return { stageId, stage, tpl };
+    }
+
+    function renderStageOptions() {
+      els.tplStage.innerHTML = '';
+      Object.entries(TEMPLATES).forEach(([id, s]) => {
+        const opt = document.createElement('option');
+        opt.value = id;
+        opt.textContent = s.label;
+        els.tplStage.appendChild(opt);
+      });
+    }
+
+    function renderTemplateOptions() {
+      const stageId = els.tplStage.value;
+      const stage = TEMPLATES[stageId];
+      els.tplTemplate.innerHTML = '';
+      stage.templates.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t.id;
+        opt.textContent = t.title;
+        els.tplTemplate.appendChild(opt);
+      });
+    }
+
+    function renderParams(params, saved) {
+      els.tplParams.innerHTML = '';
+      params.forEach(p => {
+        const wrap = document.createElement('div');
+        wrap.className = 'assist-field';
+        const lab = document.createElement('label');
+        lab.textContent = p.required ? `${p.label} *` : p.label;
+        const input = document.createElement('input');
+        input.value = saved?.[p.key] ?? '';
+        input.placeholder = p.placeholder ?? '';
+        input.dataset.key = p.key;
+        input.addEventListener('input', () => updateTemplatePreview());
+        wrap.appendChild(lab);
+        wrap.appendChild(input);
+        els.tplParams.appendChild(wrap);
+      });
+    }
+
+    function getParamValues() {
+      const out = {};
+      els.tplParams.querySelectorAll('input[data-key]').forEach(i => {
+        out[i.dataset.key] = i.value;
+      });
+      return out;
+    }
+
+    function applyTemplateBody(body, values) {
+      return String(body).replace(/\{\{(\w+)\}\}/g, (m, k) => String(values?.[k] ?? '').trim());
+    }
+
+    function buildStructuredPrompt({ tpl, stageId, values, strategies, skillIds }) {
+      const missing = (tpl.params ?? []).filter(p => p.required && !String(values[p.key] ?? '').trim()).map(p => p.key);
+      const inv = skillIds.map(formatSkillId).filter(Boolean);
+      const skillsBlock = inv.length ? `\nSkills to invoke (minimal set):\n${inv.join(' ')}\n` : '';
+
+      const base = applyTemplateBody(tpl.body, values).trim();
+      const blocks = [base, skillsBlock].filter(Boolean);
+
+      if (strategies.constraints) {
+        blocks.push(
+          '## Constraints\n' +
+            '- Keep output concise and implementation-ready\n' +
+            '- Avoid ambiguous language; make assumptions explicit\n' +
+            '- Prefer safe, reversible decisions\n'
+        );
+      }
+      if (strategies.outputs) {
+        blocks.push(
+          '## Output Requirements\n' +
+            '- Use the requested headers\n' +
+            '- Provide copy-pasteable artifacts\n' +
+            '- Include concrete examples where helpful\n'
+        );
+      }
+      if (strategies.validation) {
+        blocks.push(
+          '## Validation & Error Prevention\n' +
+            '- Identify missing inputs and ask only the minimum clarifying questions\n' +
+            '- Add validation rules and failure modes\n' +
+            '- Include a final checklist to prevent regressions\n'
+        );
+      }
+      if (strategies.tests) {
+        blocks.push(
+          '## Testing & Edge Cases\n' +
+            '- List critical paths + edge cases\n' +
+            '- Provide acceptance criteria as ☐ items\n'
+        );
+      }
+      if (strategies.next) {
+        blocks.push('## Next Step\n- Provide the single best next action and what input is needed.\n');
+      }
+
+      const prompt = blocks.join('\n').trim();
+      return { prompt, missing, stageId };
+    }
+
+    function updateTemplatePreview() {
+      const { stageId, tpl } = getActiveTemplate();
+      if (!tpl) return;
+      const values = getParamValues();
+      const strategies = getActiveStrategies();
+      const skillIds = unique([...(tpl.recommendedSkillIds ?? []), ...Array.from(bundle)]).slice(0, 8);
+      const out = buildStructuredPrompt({ tpl, stageId, values, strategies, skillIds });
+      els.tplPreview.textContent = out.prompt;
+      els.tplHint.textContent = out.missing.length
+        ? `Missing required: ${out.missing.join(', ')}`
+        : 'Ready to copy. Add to pack to export/share.';
+    }
+
+    function addToPack(entry) {
+      pack.unshift(entry);
+      pack = pack.slice(0, 50);
+      setJson(STORAGE.pack, pack);
+      renderPack();
+    }
+
+    function renderPack() {
+      els.packList.innerHTML = '';
+      if (!pack.length) {
+        els.packList.innerHTML = '<div class="assist-hint">No saved prompts yet. Use “Add to Export Pack”.</div>';
+        return;
+      }
+      pack.forEach((p, idx) => {
+        const item = document.createElement('div');
+        item.className = 'assist-pack-item';
+        item.innerHTML =
+          `<div class="assist-pack-title">${p.title}</div>` +
+          `<div class="assist-pack-meta">Stage: ${p.stage} · Created: ${new Date(p.createdAt).toLocaleString()}</div>`;
+        const actions = document.createElement('div');
+        actions.className = 'assist-pack-actions';
+        const copyBtn = document.createElement('button');
+        copyBtn.type = 'button';
+        copyBtn.className = 'copy-all-btn';
+        copyBtn.textContent = 'Copy';
+        copyBtn.addEventListener('click', async () => {
+          await writeToClipboard(p.prompt);
+          flashButtonState(copyBtn, '✓ Copied', 'Copy');
+        });
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'copy-all-btn';
+        removeBtn.textContent = 'Remove';
+        removeBtn.addEventListener('click', () => {
+          pack.splice(idx, 1);
+          setJson(STORAGE.pack, pack);
+          renderPack();
+        });
+        actions.appendChild(copyBtn);
+        actions.appendChild(removeBtn);
+        item.appendChild(actions);
+        els.packList.appendChild(item);
+      });
+    }
+
+    function renderBundle() {
+      const ids = Array.from(bundle);
+      els.bundleCount.textContent = String(ids.length);
+      els.bundleChips.innerHTML = '';
+      ids.forEach(id => {
+        const chip = document.createElement('span');
+        chip.className = 'bundle-chip';
+        chip.innerHTML = `${formatSkillId(id)} <button type="button" aria-label="Remove">×</button>`;
+        chip.querySelector('button').addEventListener('click', () => {
+          bundle.delete(id);
+          setJson(STORAGE.bundle, Array.from(bundle));
+          renderBundle();
+          renderSkills();
+        });
+        els.bundleChips.appendChild(chip);
+      });
+    }
+
+    function filterSkills() {
+      const q = skillsQuery.toLowerCase().trim().replace(/^[@/]+/, '');
+      return skillsCatalog.filter(s => {
+        const catOk = skillsActiveCat === 'ALL' || (s.category ?? 'General') === skillsActiveCat;
+        const qOk =
+          !q ||
+          String(s.id).toLowerCase().includes(q) ||
+          String(s.description ?? '').toLowerCase().includes(q) ||
+          String(s.category ?? '').toLowerCase().includes(q);
+        return catOk && qOk;
+      });
+    }
+
+    function renderCats() {
+      const cats = new Map();
+      skillsCatalog.forEach(s => {
+        const c = s.category ?? 'General';
+        cats.set(c, (cats.get(c) ?? 0) + 1);
+      });
+      const sorted = Array.from(cats.entries()).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+      els.skillsCats.innerHTML = '';
+
+      function pill(label, value) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `assist-pill${skillsActiveCat === value ? ' active' : ''}`;
+        btn.textContent = label;
+        btn.addEventListener('click', () => {
+          skillsActiveCat = value;
+          skillsPage = 1;
+          renderCats();
+          renderSkills();
+        });
+        return btn;
+      }
+
+      els.skillsCats.appendChild(pill(`All (${skillsCatalog.length})`, 'ALL'));
+      sorted.slice(0, 18).forEach(([c, n]) => els.skillsCats.appendChild(pill(`${c} (${n})`, c)));
+    }
+
+    function renderSkills() {
+      const filtered = filterSkills();
+      const total = filtered.length;
+      const showCount = Math.min(total, skillsPage * SKILLS_PAGE_SIZE);
+      const visible = filtered.slice(0, showCount);
+
+      els.skillsMeta.textContent =
+        `Loaded ${skillsCatalog.length} skills. Showing ${visible.length} of ${total}. ` +
+        'Bundle + export pack are stored locally in your browser.';
+
+      els.skillsGrid.innerHTML = visible
+        .map(s => {
+          const id = String(s.id);
+          const cat = String(s.category ?? 'General');
+          const inBundle = bundle.has(id);
+          return (
+            `<div class="assist-skill-card">` +
+            `<div class="assist-skill-top">` +
+            `<div class="assist-skill-id">${formatSkillId(id)}</div>` +
+            `<div class="assist-skill-cat">${cat}</div>` +
+            `</div>` +
+            `<div class="assist-skill-desc">${String(s.description ?? '').replace(/</g, '&lt;')}</div>` +
+            `<div class="assist-skill-actions">` +
+            `<button class="assist-btn primary" type="button" data-copy="${id}">Copy</button>` +
+            `<button class="assist-btn" type="button" data-bundle="${id}">${inBundle ? '✓ In Bundle' : '+ Bundle'}</button>` +
+            `</div>` +
+            `</div>`
+          );
+        })
+        .join('');
+
+      els.skillsGrid.querySelectorAll('button[data-copy]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = btn.getAttribute('data-copy');
+          const text = formatSkillId(id);
+          await writeToClipboard(text);
+          flashButtonState(btn, '✓ Copied', 'Copy');
+        });
+      });
+
+      els.skillsGrid.querySelectorAll('button[data-bundle]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-bundle');
+          if (bundle.has(id)) bundle.delete(id);
+          else bundle.add(id);
+          setJson(STORAGE.bundle, Array.from(bundle));
+          renderBundle();
+          renderSkills();
+          updateTemplatePreview();
+        });
+      });
+
+      const hasMore = total > visible.length;
+      els.skillsLoadRow.style.display = hasMore ? 'flex' : 'none';
+      els.skillsLoadBtn.textContent = hasMore ? `Load more (${total - visible.length} left)` : 'Load more';
+    }
+
+    async function loadSkillsFromFile(file) {
+      const text = await file.text();
+      const json = JSON.parse(text);
+      if (!Array.isArray(json)) throw new Error('skills_index.json must be an array');
+      const normalized = json
+        .filter(e => e && typeof e === 'object' && typeof e.id === 'string' && e.id.trim())
+        .map(e => ({
+          id: e.id.trim(),
+          description: String(e.description ?? '').trim() || 'No description available.',
+          category: String(e.category ?? '').trim() || 'General',
+          risk: String(e.risk ?? '').trim() || 'none'
+        }));
+      skillsCatalog = normalized;
+      assistantSkillIndex = buildSkillIndex(skillsCatalog);
+      setJson(STORAGE.skills, skillsCatalog);
+      skillsPage = 1;
+      skillsActiveCat = 'ALL';
+      renderCats();
+      renderSkills();
+    }
+
+    function generateOptimizedPrompt({ tool, stage, raw, skillIds }) {
+      const inv = skillIds.map(formatSkillId).filter(Boolean);
+      const skillLine = inv.length ? inv.join(' ') : '(none)';
+
+      const stageLabel = stage === 'mvp' ? 'MVP Build' : stage[0].toUpperCase() + stage.slice(1);
+      const toolLabel = tool === 'antigravity' ? 'Google Antigravity' : tool[0].toUpperCase() + tool.slice(1);
+
+      return (
+        `You are an expert no-code builder.\n\n` +
+        `Tool: ${toolLabel}\n` +
+        `Stage: ${stageLabel}\n\n` +
+        `Skills to invoke (minimal set): ${skillLine}\n\n` +
+        `Task:\n${raw.trim()}\n\n` +
+        `Output format (use these headers):\n` +
+        `## Plan\n` +
+        `## Data / Schema\n` +
+        `## UI / Screens\n` +
+        `## State + Validation\n` +
+        `## Error Handling\n` +
+        `## Tests (critical paths)\n` +
+        `## Deployment Steps\n` +
+        `## Acceptance Criteria (☐ checklist)\n`
+      );
+    }
+
+    function boot() {
+      const savedSkills = getJson(STORAGE.skills, null);
+      if (Array.isArray(savedSkills) && savedSkills.length) {
+        skillsCatalog = savedSkills;
+        assistantSkillIndex = buildSkillIndex(skillsCatalog);
+      }
+
+      renderStageOptions();
+      renderTemplateOptions();
+      renderStrategies();
+      const { tpl } = getActiveTemplate();
+      renderParams(tpl.params ?? []);
+      renderCats();
+      renderBundle();
+      renderSkills();
+      renderPack();
+      updateTemplatePreview();
+
+      els.tplStage.addEventListener('change', () => {
+        renderTemplateOptions();
+        const { tpl: nextTpl } = getActiveTemplate();
+        renderParams(nextTpl.params ?? []);
+        updateTemplatePreview();
+      });
+
+      els.tplTemplate.addEventListener('change', () => {
+        const { tpl: nextTpl } = getActiveTemplate();
+        renderParams(nextTpl.params ?? []);
+        updateTemplatePreview();
+      });
+
+      els.tplCopy.addEventListener('click', async () => {
+        const text = els.tplPreview.textContent ?? '';
+        if (!text.trim()) return;
+        await writeToClipboard(text);
+        flashButtonState(els.tplCopy, '✓ Copied', 'Copy Prompt');
+      });
+
+      els.tplAdd.addEventListener('click', () => {
+        const { stageId, tpl } = getActiveTemplate();
+        const prompt = els.tplPreview.textContent ?? '';
+        if (!prompt.trim()) return;
+        addToPack({
+          title: tpl.title,
+          stage: stageId,
+          prompt,
+          createdAt: Date.now()
+        });
+        flashButtonState(els.tplAdd, '✓ Added', 'Add to Export Pack');
+      });
+
+      els.skillsSearch.addEventListener('input', e => {
+        skillsQuery = e.target.value ?? '';
+        skillsPage = 1;
+        renderSkills();
+      });
+
+      els.skillsUpload.addEventListener('change', async e => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        try {
+          await loadSkillsFromFile(file);
+        } catch (err) {
+          els.skillsMeta.textContent = `Failed to load skills: ${err?.message ?? err}`;
+        } finally {
+          e.target.value = '';
+        }
+      });
+
+      els.skillsLoadBtn.addEventListener('click', () => {
+        skillsPage += 1;
+        renderSkills();
+      });
+
+      els.bundleCopy.addEventListener('click', async () => {
+        const text = Array.from(bundle).map(formatSkillId).filter(Boolean).join(' ');
+        if (!text) return;
+        await writeToClipboard(text);
+        flashButtonState(els.bundleCopy, '✓ Copied', 'Copy Bundle');
+      });
+
+      els.bundleClear.addEventListener('click', () => {
+        bundle = new Set();
+        setJson(STORAGE.bundle, []);
+        renderBundle();
+        renderSkills();
+        updateTemplatePreview();
+      });
+
+      els.optGen.addEventListener('click', () => {
+        const raw = els.optRaw.value ?? '';
+        const tool = els.optTool.value ?? 'trae';
+        const stage = els.optStage.value ?? 'ideation';
+        const skillIds = Array.from(bundle).slice(0, 12);
+        els.optOut.textContent = raw.trim()
+          ? generateOptimizedPrompt({ tool, stage, raw, skillIds })
+          : '';
+      });
+
+      els.optCopy.addEventListener('click', async () => {
+        const text = els.optOut.textContent ?? '';
+        if (!text.trim()) return;
+        await writeToClipboard(text);
+        flashButtonState(els.optCopy, '✓ Copied', 'Copy');
+      });
+
+      els.optAdd.addEventListener('click', () => {
+        const text = els.optOut.textContent ?? '';
+        if (!text.trim()) return;
+        addToPack({
+          title: 'Optimized Prompt',
+          stage: els.optStage.value ?? 'ideation',
+          prompt: text,
+          createdAt: Date.now()
+        });
+        flashButtonState(els.optAdd, '✓ Added', 'Add to Export Pack');
+      });
+
+      els.packExportJson.addEventListener('click', () => {
+        const payload = {
+          version: '1.0',
+          createdAt: Date.now(),
+          bundle: Array.from(bundle).map(formatSkillId).filter(Boolean),
+          prompts: pack
+        };
+        downloadFile('prompt-pack.json', JSON.stringify(payload, null, 2), 'application/json');
+      });
+
+      els.packExportMd.addEventListener('click', () => {
+        const lines = [];
+        lines.push('# Prompt Pack');
+        lines.push('');
+        const b = Array.from(bundle).map(formatSkillId).filter(Boolean);
+        if (b.length) {
+          lines.push('## Skill Bundle');
+          lines.push('');
+          lines.push('```');
+          lines.push(b.join(' '));
+          lines.push('```');
+          lines.push('');
+        }
+        pack.forEach(p => {
+          lines.push(`## ${p.title}`);
+          lines.push('');
+          lines.push(`Stage: ${p.stage}`);
+          lines.push('');
+          lines.push('```');
+          lines.push(p.prompt.trim());
+          lines.push('```');
+          lines.push('');
+        });
+        downloadFile('prompt-pack.md', lines.join('\n'), 'text/markdown');
+      });
+
+      els.packImport.addEventListener('change', async e => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        try {
+          const raw = await file.text();
+          const json = JSON.parse(raw);
+          if (Array.isArray(json?.bundle)) {
+            bundle = new Set(json.bundle.map(x => String(x).replace(/^[@/]+/, '')).filter(Boolean));
+            setJson(STORAGE.bundle, Array.from(bundle));
+            renderBundle();
+          }
+          if (Array.isArray(json?.prompts)) {
+            pack = json.prompts.filter(p => p && typeof p.prompt === 'string');
+            setJson(STORAGE.pack, pack);
+            renderPack();
+          }
+          updateTemplatePreview();
+        } catch (err) {
+          els.packList.innerHTML = `<div class="assist-hint">Import failed: ${err?.message ?? err}</div>`;
+        } finally {
+          e.target.value = '';
+        }
+      });
+
+      els.packClear.addEventListener('click', () => {
+        pack = [];
+        setJson(STORAGE.pack, pack);
+        renderPack();
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', boot);
+    } else {
+      boot();
+    }
+  })();
 </script>
 </body>
 </html>
