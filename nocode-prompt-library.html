@@ -3808,20 +3808,40 @@ RLS: Read/Write only where user_id = auth.uid()
     function filterSkills() {
       const q = skillsQuery.toLowerCase().trim().replace(/^[@/]+/, '');
       return skillsCatalog.filter(s => {
-        const catOk = skillsActiveCat === 'ALL' || (s.category ?? 'General') === skillsActiveCat;
+        const catOk = skillsActiveCat === 'ALL' || (s.groupCategory ?? 'General') === skillsActiveCat;
         const qOk =
           !q ||
           String(s.id).toLowerCase().includes(q) ||
           String(s.description ?? '').toLowerCase().includes(q) ||
-          String(s.category ?? '').toLowerCase().includes(q);
+          String(s.groupCategory ?? '').toLowerCase().includes(q) ||
+          String(s.originalCategory ?? '').toLowerCase().includes(q);
         return catOk && qOk;
       });
+    }
+
+    function functionalCategory({ id, category, description }) {
+      const t = `${id ?? ''} ${category ?? ''} ${description ?? ''}`.toLowerCase();
+      if (/product|brainstorm|discovery|mvp|strategy|research|jtbd|persona|pricing|roadmap|prd/.test(t)) return 'Product';
+      if (/design|figma|ui|ux|wireframe|accessib|wcag|typograph|layout|design.system/.test(t)) return 'Design';
+      if (/frontend|react|next|vue|svelte|angular|css|html|component|ui\.kit|tailwind/.test(t)) return 'Frontend';
+      if (/backend|api|rest|graphql|endpoint|server|node|express|schema|contract/.test(t)) return 'Backend';
+      if (/database|postgres|sql|supabase|firebase|mongo|redis|migration|rls/.test(t)) return 'Database';
+      if (/auth|oauth|sso|jwt|session|login|signup|permission/.test(t)) return 'Auth';
+      if (/security|owasp|threat|vuln|xss|csrf|encrypt|secret/.test(t)) return 'Security';
+      if (/test|qa|e2e|playwright|cypress|unit|integration|coverage/.test(t)) return 'Testing';
+      if (/deploy|release|ci\/cd|pipeline|github.actions|vercel|netlify|docker|k8s|devops/.test(t)) return 'DevOps';
+      if (/monitor|observability|logs|metrics|tracing|sentry|alert|analytics/.test(t)) return 'Observability';
+      if (/automation|zapier|make\.com|n8n|webhook|integration|workflow/.test(t)) return 'Automation';
+      if (/seo|marketing|growth|copywriting|landing|conversion/.test(t)) return 'Marketing';
+      if (/docs|documentation|readme|guide|changelog/.test(t)) return 'Docs';
+      if (/agent|mcp|llm|ai|claude|gpt|gemini|antigravity/.test(t)) return 'AI/Agents';
+      return 'General';
     }
 
     function renderCats() {
       const cats = new Map();
       skillsCatalog.forEach(s => {
-        const c = s.category ?? 'General';
+        const c = s.groupCategory ?? 'General';
         cats.set(c, (cats.get(c) ?? 0) + 1);
       });
       const sorted = Array.from(cats.entries()).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
@@ -3842,7 +3862,7 @@ RLS: Read/Write only where user_id = auth.uid()
       }
 
       els.skillsCats.appendChild(pill(`All (${skillsCatalog.length})`, 'ALL'));
-      sorted.slice(0, 18).forEach(([c, n]) => els.skillsCats.appendChild(pill(`${c} (${n})`, c)));
+      sorted.forEach(([c, n]) => els.skillsCats.appendChild(pill(`${c} (${n})`, c)));
     }
 
     function renderSkills() {
@@ -3853,18 +3873,19 @@ RLS: Read/Write only where user_id = auth.uid()
 
       els.skillsMeta.textContent =
         `Loaded ${skillsCatalog.length} skills. Showing ${visible.length} of ${total}. ` +
-        'Bundle + export pack are stored locally in your browser.';
+        'Browse by functional categories, search, and copy /skill invocations. Bundle + export pack are stored locally.';
 
       els.skillsGrid.innerHTML = visible
         .map(s => {
           const id = String(s.id);
-          const cat = String(s.category ?? 'General');
+          const cat = String(s.groupCategory ?? 'General');
+          const catTitle = String(s.originalCategory ?? '').replace(/"/g, '&quot;');
           const inBundle = bundle.has(id);
           return (
             `<div class="assist-skill-card">` +
             `<div class="assist-skill-top">` +
             `<div class="assist-skill-id">${formatSkillId(id)}</div>` +
-            `<div class="assist-skill-cat">${cat}</div>` +
+            `<div class="assist-skill-cat" title="${catTitle}">${cat}</div>` +
             `</div>` +
             `<div class="assist-skill-desc">${String(s.description ?? '').replace(/</g, '&lt;')}</div>` +
             `<div class="assist-skill-actions">` +
@@ -3911,7 +3932,39 @@ RLS: Read/Write only where user_id = auth.uid()
         .map(e => ({
           id: e.id.trim(),
           description: String(e.description ?? '').trim() || 'No description available.',
-          category: String(e.category ?? '').trim() || 'General',
+          originalCategory: String(e.category ?? '').trim() || 'General',
+          groupCategory: functionalCategory({
+            id: e.id,
+            category: e.category,
+            description: e.description
+          }),
+          risk: String(e.risk ?? '').trim() || 'none'
+        }));
+      skillsCatalog = normalized;
+      assistantSkillIndex = buildSkillIndex(skillsCatalog);
+      setJson(STORAGE.skills, skillsCatalog);
+      skillsPage = 1;
+      skillsActiveCat = 'ALL';
+      renderCats();
+      renderSkills();
+    }
+
+    async function loadSkillsFromRepoFile() {
+      const res = await fetch('./data/skills_index.json', { cache: 'no-cache' });
+      if (!res.ok) throw new Error(`skills_index.json not found (${res.status})`);
+      const json = await res.json();
+      if (!Array.isArray(json)) throw new Error('skills_index.json is not an array');
+      const normalized = json
+        .filter(e => e && typeof e === 'object' && typeof e.id === 'string' && e.id.trim())
+        .map(e => ({
+          id: e.id.trim(),
+          description: String(e.description ?? '').trim() || 'No description available.',
+          originalCategory: String(e.category ?? '').trim() || 'General',
+          groupCategory: functionalCategory({
+            id: e.id,
+            category: e.category,
+            description: e.description
+          }),
           risk: String(e.risk ?? '').trim() || 'none'
         }));
       skillsCatalog = normalized;
@@ -3948,11 +4001,24 @@ RLS: Read/Write only where user_id = auth.uid()
       );
     }
 
-    function boot() {
+    async function boot() {
       const savedSkills = getJson(STORAGE.skills, null);
       if (Array.isArray(savedSkills) && savedSkills.length) {
         skillsCatalog = savedSkills;
         assistantSkillIndex = buildSkillIndex(skillsCatalog);
+      } else {
+        try {
+          await loadSkillsFromRepoFile();
+        } catch (e) {
+          skillsCatalog = CORE_SKILLS.map(s => ({
+            id: s.id,
+            description: s.description,
+            originalCategory: s.category,
+            groupCategory: functionalCategory(s),
+            risk: s.risk
+          }));
+          assistantSkillIndex = buildSkillIndex(skillsCatalog);
+        }
       }
 
       renderStageOptions();

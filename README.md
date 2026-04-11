@@ -49,7 +49,7 @@ Build stable, repeatable no-code MVPs by using **structured prompts**, **validat
 2. Enter the 1-sentence idea → answer MCQs → copy the recommended prompt + `/skills`
 3. Open **Assistant**
    - Choose a template → fill parameters → copy or **Add to Export Pack**
-   - Upload `skills_index.json` (optional) to browse 1300+ skills offline
+   - Browse the built-in skill directory (loads `data/skills_index.json` when hosted) or upload `skills_index.json` manually
    - Build a **bundle** → generate an optimized prompt for your tool
    - Export as **JSON/Markdown** to share or reuse later
 
